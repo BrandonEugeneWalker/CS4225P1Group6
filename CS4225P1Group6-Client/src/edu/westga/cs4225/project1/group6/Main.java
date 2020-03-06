@@ -18,6 +18,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 	
+	private static final String TITLE = "Multiplayer RPG";
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -25,6 +27,7 @@ public class Main extends Application {
 			FXMLLoader loader = new FXMLLoader(Main.class.getResource(connectionPath.toString()));
 			Pane pane = loader.load();
 			Scene scene = new Scene(pane);
+			primaryStage.setTitle(TITLE);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
