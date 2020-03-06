@@ -1,7 +1,5 @@
 package edu.westga.cs4225.project1.group6.game;
 
-import java.util.Random;
-
 import edu.westga.cs4225.project1.group6.game.roles.Role;
 import edu.westga.cs4225.project1.group6.game.roles.moves.Move;
 import edu.westga.cs4225.project1.group6.game.roles.moves.NotEnoughManaException;
@@ -103,9 +101,10 @@ public abstract class Entity {
 	}
 	
 	/**
-	 * Makes this entity take the specified amount of damage.
+	 * Makes this entity take the specified amount of damage. A negative
+	 * damage value will increase the health remaining of this entity.
 	 * 
-	 * @precondition damage >= 0
+	 * @precondition none
 	 * @postcondition getHealthRemaining() == getHealthRemaining()@prev - damage &&
 	 * 				  if damage >= getHealthRemaining(), then isDead()
 	 * 
@@ -113,10 +112,6 @@ public abstract class Entity {
 	 * @return true if the damage killed this entity; false otherwise.
 	 */
 	public boolean takeDamage(int damage) {
-		if (damage < 0) {
-			throw new IllegalArgumentException("damage should be greater than or equal to 0");
-		}
-		
 		this.healthRemaining -= damage;
 		return this.isDead();
 	}
@@ -193,12 +188,7 @@ public abstract class Entity {
 		}
 		
 		this.manaRemaining -= move.getManaCost();
-		
-		Random accuracyRoller = new Random();
-		double roll = accuracyRoller.nextDouble();
-		if (roll <= move.getAccuracy()) {
-			target.takeDamage(move.getDamage());
-		}
+		move.performMove(this, target);
 		
 		return target.isDead();
 	}

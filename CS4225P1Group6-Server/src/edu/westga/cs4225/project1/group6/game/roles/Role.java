@@ -33,7 +33,7 @@ public abstract class Role {
 	 * @param primaryMove the role's primary move.
 	 * @param specialMove the role's special move.
 	 */
-	protected Role(int healthMultiplier, double manaMultiplier, Move primaryMove, Move specialMove) {
+	protected Role(double healthMultiplier, double manaMultiplier, Move primaryMove, Move specialMove) {
 		if (healthMultiplier <= 0) {
 			throw new IllegalArgumentException("healthMultiplier should not be less than or equal to zero.");
 		}

@@ -1,5 +1,7 @@
 package edu.westga.cs4225.project1.group6.game.roles.moves;
 
+import edu.westga.cs4225.project1.group6.game.Entity;
+
 /**
  * Represents a generic move. Each move has an accuracy value,
  * a damage value, and a manaCost value.
@@ -21,7 +23,7 @@ public abstract class Move {
 	 * does assuming there are no other factors reducing the damage. The manacost
 	 * is the cost to perform the move. Mana cost can be zero.
 	 * 
-	 * @precondition accuracy > 0 && accuracy <= 1 && damage >= 0 && manaCost >= 0
+	 * @precondition accuracy > 0 && accuracy <= 1 && manaCost >= 0
 	 * @postcondition getAccuracy() == accuracy && getDamage() == damage && getManaCost() == manaCost
 	 * 
 	 * @param accuracy the move's accuracy.
@@ -32,9 +34,6 @@ public abstract class Move {
 		if (accuracy <= 0 || accuracy > 1) {
 			throw new IllegalArgumentException("accuracy should not be less than or equal to zero or greater than 1.");
 		}
-		if (damage < 0) {
-			throw new IllegalArgumentException("damage should not be less than zero.");
-		}
 		if (manaCost < 0) {
 			throw new IllegalArgumentException("manaCost should not be less than zero.");
 		}
@@ -43,6 +42,17 @@ public abstract class Move {
 		this.damage = damage;
 		this.manaCost = manaCost;
 	}
+	
+	/**
+	 * Performs this move on the specified target.
+	 * 
+	 * @precondition source != null && target != null
+	 * @postcondition none
+	 * 
+	 * @param source the entity performing the move.
+	 * @param target the entity to perform the move on.
+	 */
+	public abstract void performMove(Entity source, Entity target);
 
 	/**
 	 * Gets this move's accuracy.
