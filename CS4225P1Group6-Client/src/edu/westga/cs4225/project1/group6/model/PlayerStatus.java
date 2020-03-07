@@ -11,5 +11,33 @@ package edu.westga.cs4225.project1.group6.model;
  *
  */
 public enum PlayerStatus {
-	Normal, Unconscious, Unresponsive, Disconnected
+	Normal, Unconscious, Unresponsive, Disconnected;
+
+	/**
+	 * Represents the PlayerStatus as a String.
+	 * 
+	 * @precondition none
+	 * @param status the status
+	 * @return the status as a string
+	 */
+	public static String statusAsString(PlayerStatus status) {
+		String returnString = "Error";
+
+		switch (status) {
+		case Normal:
+			returnString = "Normal";
+			break;
+		case Unconscious:
+			returnString = "Unconscious";
+			break;
+		case Unresponsive:
+			returnString = "Unresponsive";
+			break;
+		case Disconnected:
+			returnString = "Disconnected";
+			break;
+		}
+
+		return returnString;
+	}
 }

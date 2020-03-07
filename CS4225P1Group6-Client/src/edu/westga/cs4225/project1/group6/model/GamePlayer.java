@@ -20,6 +20,8 @@ public class GamePlayer implements Serializable {
 
 	private int playerMana;
 
+	private PlayerStatus playerStatus;
+
 	/**
 	 * Creates a new instance of a GamePlayer.
 	 * 
@@ -42,6 +44,7 @@ public class GamePlayer implements Serializable {
 		this.playerRole = role;
 		this.playerHealth = 100;
 		this.playerMana = 100;
+		this.playerStatus = PlayerStatus.Normal;
 	}
 
 	/**
@@ -82,6 +85,23 @@ public class GamePlayer implements Serializable {
 	 */
 	public int getPlayerMana() {
 		return this.playerMana;
+	}
+
+	/**
+	 * Builds and returns a description of a player that is formatted nicely for the
+	 * UI.
+	 * 
+	 * @precondition none
+	 * @return the player as a string
+	 */
+	public String getPlayerDescription() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(this.playerName + System.lineSeparator());
+		stringBuilder.append("Role: " + PlayerRole.roleAsString(this.playerRole) + System.lineSeparator());
+		stringBuilder.append("Health: " + this.playerHealth + System.lineSeparator());
+		stringBuilder.append("Mana: " + this.playerMana + System.lineSeparator());
+		stringBuilder.append("Status: " + PlayerStatus.statusAsString(this.playerStatus));
+		return stringBuilder.toString();
 	}
 
 }
