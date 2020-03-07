@@ -8,7 +8,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.Move;
 /**
  * This is the special attack for the healer role.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class GreaterHeal extends Move {

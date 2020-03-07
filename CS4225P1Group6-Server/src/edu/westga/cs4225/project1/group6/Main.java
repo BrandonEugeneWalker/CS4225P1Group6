@@ -3,7 +3,7 @@ package edu.westga.cs4225.project1.group6;
 /**
  * Starting point for the server.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class Main {

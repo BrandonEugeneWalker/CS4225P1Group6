@@ -13,7 +13,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.NotEnoughManaException
  * modifications to the concrete implementations are up to ones 
  * imagination.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public abstract class Entity {

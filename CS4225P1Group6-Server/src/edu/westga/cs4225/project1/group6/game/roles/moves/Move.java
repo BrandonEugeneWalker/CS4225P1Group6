@@ -6,7 +6,7 @@ import edu.westga.cs4225.project1.group6.game.Entity;
  * Represents a generic move. Each move has an accuracy value,
  * a damage value, and a manaCost value.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public abstract class Move {

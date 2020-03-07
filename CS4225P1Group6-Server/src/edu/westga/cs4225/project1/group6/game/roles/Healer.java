@@ -8,7 +8,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.healer.MinorHeal;
  * deal damage to enemies. Instead, they focus on
  * keeping their teammates alive.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class Healer extends Role {

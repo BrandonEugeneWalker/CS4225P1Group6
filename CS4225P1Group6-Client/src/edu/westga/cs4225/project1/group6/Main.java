@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 /**
  * Starting point for the application.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class Main extends Application {

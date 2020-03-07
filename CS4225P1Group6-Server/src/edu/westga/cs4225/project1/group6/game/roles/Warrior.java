@@ -8,7 +8,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.warrior.TwoHandedSwing
  * health multiplier than the other roles. Warriors do 
  * not use mana.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class Warrior extends Role {

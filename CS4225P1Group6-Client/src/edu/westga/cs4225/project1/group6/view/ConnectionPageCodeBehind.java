@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 /**
  * Code behind for ./fxml/ConnectionPage.fxml
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class ConnectionPageCodeBehind {

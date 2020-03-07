@@ -7,7 +7,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.Move;
  * be. Each role has its own health multiplier, mana multiplier,
  * primaryMove, and specialMove.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public abstract class Role {

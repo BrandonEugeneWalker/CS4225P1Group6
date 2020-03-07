@@ -8,7 +8,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.Move;
 /**
  * The special attack for the mage role.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class MeteorStrike extends Move {

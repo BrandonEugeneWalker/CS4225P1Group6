@@ -6,7 +6,7 @@ import edu.westga.cs4225.project1.group6.game.Entity;
  * An exception that is thrown when an entity attemps to perform
  * a move without enough mana.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class NotEnoughManaException extends RuntimeException {

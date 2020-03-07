@@ -7,7 +7,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.mage.MeteorStrike;
  * This is the ranged role. A mage has a smaller health
  * multiplier, but has a much higher mana multiplier.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class Mage extends Role {

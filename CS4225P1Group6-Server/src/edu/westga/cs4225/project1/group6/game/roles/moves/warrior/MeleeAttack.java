@@ -8,7 +8,7 @@ import edu.westga.cs4225.project1.group6.game.roles.moves.Move;
 /**
  * The primary attack for the Warrior role.
  * 
- * @author Luke Whaley
+ * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
 public class MeleeAttack extends Move {
