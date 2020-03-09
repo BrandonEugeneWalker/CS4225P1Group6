@@ -1,6 +1,8 @@
 package edu.westga.cs4225.project1.group6.server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -52,9 +54,28 @@ public class GameServer {
 	 */
 	public void start() throws IOException {
 		this.server = new ServerSocket(this.port);
-		while (true) {
+		int clientPort = this.port + 1;
+		while (!this.server.isClosed()) {
 			Socket client = this.server.accept();
-			this.pool.execute(new ClientConnection(client));
+			ClientConnectionPort clientConnection = new ClientConnectionPort(clientPort);
+			this.pool.execute(clientConnection);
+			
+			try (ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+					ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())) {
+				// Receive GamePlayer object from ObjectInputStream in. Once we receive,
+				// give it to the clientConnection. Probably should separate the GamePlayer data
+				// from the ClientConnectionPort class though. They should be linked somehow though
+				// to maintain the relationship.
+				
+				// TODO: Uncomment below once GamePlayer is copied to the server side.
+				// GamePlayer player = (GamePlayer) in.readObject();
+				
+				// Next occurs after the GamePlayer object is received.
+				// We are going to send a number back to the client so that they know which
+				// new port to connect to for their own private client-server interaction with the server.
+				out.writeObject(clientPort);
+			}
+			clientPort++;
 		}
 	}
 
