@@ -6,6 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import edu.westga.cs4225.project1.group6.model.MoveType;
+import edu.westga.cs4225.project1.group6.model.TurnResults;
+
 /**
  * Maintains a connection with a particular client.
  * Is capable of sending and receiving messages to the 
@@ -44,22 +47,24 @@ public class ClientConnectionPort implements Runnable {
 	private void attemptToListen() {
 		try {
 			this.startListening();
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			System.err.println(e.getMessage());
 		}
 	}
 	
-	private void startListening() throws IOException {
+	private void startListening() throws IOException, ClassNotFoundException {
 		this.server = new ServerSocket(this.port);
 		while (!this.server.isClosed()) {
 			Socket client = this.server.accept();
 			try (ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 					ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())) {
-				// Read client input from in. Write back to the client with out.
-				// A ClientConnectionPort will be created for every player that is playing
-				// the game. There will be a thread for each player (executing this runnable).
-				// On each thread, a new ServerSocket will be opened on a new port. This listening
-				// port will solely be used to communicate with ONE client.
+				MoveType type = (MoveType) in.readObject();
+				
+				// TODO: Execute the move for this client.
+				// Wait until server gives the heads up and execute the following two lines
+				// to send results back to the client.
+				//TurnResults results = new TurnResults(log, players);
+				//out.writeObject(results);
 			}
 		}
 	}

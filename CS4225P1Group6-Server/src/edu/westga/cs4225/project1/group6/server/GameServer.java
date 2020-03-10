@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import edu.westga.cs4225.project1.group6.model.GamePlayer;
+
 /**
  * This is the game's server class. It 
  * continuously listens for connections and
@@ -51,8 +53,10 @@ public class GameServer {
 	 * @postcondition the server starts
 	 * 
 	 * @throws IOException if an I/O error occurs.
+	 * @throws ClassNotFoundException 
 	 */
-	public void start() throws IOException {
+	public void start() throws IOException, ClassNotFoundException {
+		System.out.println("Server Running - Port: " + this.port);
 		this.server = new ServerSocket(this.port);
 		int clientPort = this.port + 1;
 		while (!this.server.isClosed()) {
@@ -62,17 +66,10 @@ public class GameServer {
 			
 			try (ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 					ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())) {
-				// Receive GamePlayer object from ObjectInputStream in. Once we receive,
-				// give it to the clientConnection. Probably should separate the GamePlayer data
-				// from the ClientConnectionPort class though. They should be linked somehow though
-				// to maintain the relationship.
 				
-				// TODO: Uncomment below once GamePlayer is copied to the server side.
-				// GamePlayer player = (GamePlayer) in.readObject();
-				
-				// Next occurs after the GamePlayer object is received.
-				// We are going to send a number back to the client so that they know which
-				// new port to connect to for their own private client-server interaction with the server.
+				GamePlayer player = (GamePlayer) in.readObject();
+				// TODO: Add this player to the game somehow
+				System.out.println(player.getPlayerDescription());
 				out.writeObject(clientPort);
 			}
 			clientPort++;

@@ -1,10 +1,15 @@
 package edu.westga.cs4225.project1.group6.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import edu.westga.cs4225.project1.group6.client.RpgServerConnection;
+import edu.westga.cs4225.project1.group6.client.ServerConnection;
 import edu.westga.cs4225.project1.group6.model.GameLog;
 import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.MoveType;
+import edu.westga.cs4225.project1.group6.model.TurnResults;
 
 /**
  * Handles interaction between the GamePage and the model logic.
@@ -15,10 +20,45 @@ import edu.westga.cs4225.project1.group6.model.GamePlayer;
 public class GamePageController {
 
 	private GameLog rpgGameLog;
-	private ArrayList<GamePlayer> rpgGamePlayers;
-	private RpgServerConnection rpgServerConnection;
+	private List<GamePlayer> rpgGamePlayers;
+	private ServerConnection rpgServerConnection;
 	private GamePlayer localPlayer;
 
+	private static GamePageController singletonController = null;
+	
+	/**
+	 * Gets the global GamePageController.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return the GamePageController or null if it has not been initialized yet.
+	 */
+	public static GamePageController get() {
+		return singletonController;
+	}
+	
+	/**
+	 * Initializes the global GamePageController. This should only happen once.
+	 * A runtime exception will occur if this is called more than once. The rpgGamePlayers
+	 * contains all of the players in the game even this client player.
+	 * 
+	 * @precondition localPlayer != null && rpgServerConnection != null
+	 * @postcondition GamePageController.get() != null
+	 * 
+	 * @param localPlayer the GamePlayer to give the controller.
+	 * @param rpgServerConnection the server connection for the player.
+	 * @return the created GamePageController.
+	 */
+	public static GamePageController initialize(GamePlayer localPlayer, ServerConnection rpgServerConnection) {
+		if (singletonController != null) {
+			throw new RuntimeException("Controller is already initialized. Initialization only happens once.");
+		}
+		
+		singletonController = new GamePageController(localPlayer, rpgServerConnection);
+		return singletonController;
+	}
+	
 	/**
 	 * Creates a new isntance of the GamePageController
 	 * 
@@ -27,7 +67,7 @@ public class GamePageController {
 	 * @param localPlayer         the player playing the game on this client
 	 * @param rpgServerConnection the connection to the server
 	 */
-	public GamePageController(GamePlayer localPlayer, RpgServerConnection rpgServerConnection) {
+	private GamePageController(GamePlayer localPlayer, ServerConnection rpgServerConnection) {
 		if (localPlayer == null) {
 			throw new IllegalArgumentException("Cannot play the game without a player!");
 		}
@@ -38,6 +78,7 @@ public class GamePageController {
 		this.rpgServerConnection = rpgServerConnection;
 		this.rpgGameLog = new GameLog();
 		this.rpgGamePlayers = new ArrayList<GamePlayer>();
+		this.rpgGamePlayers.add(localPlayer);
 	}
 
 	/**
@@ -56,7 +97,7 @@ public class GamePageController {
 	 * @precondition none
 	 * @return the non-local players
 	 */
-	public ArrayList<GamePlayer> getRpgGamePlayers() {
+	public List<GamePlayer> getRpgGamePlayers() {
 		return this.rpgGamePlayers;
 	}
 
@@ -112,8 +153,15 @@ public class GamePageController {
 	}
 
 	
-	public void submitMove() {
-		// TODO
+	public void submitMove(MoveType type) {
+		try {
+			TurnResults results = this.rpgServerConnection.sendMove(type);
+			this.rpgGameLog = results.getLog();
+			this.rpgGamePlayers = results.getPlayers();
+			this.localPlayer = this.rpgGamePlayers.stream().filter(player -> player.getPlayerName().equals(this.localPlayer.getPlayerName())).collect(Collectors.toList()).get(0);
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void updateRpgGameLog() {
