@@ -14,8 +14,8 @@ public class FreshConnectionResults implements Serializable {
 	private static final long serialVersionUID = 5147776477998742402L;
 	
 	private int port;
-	private ArrayList<GamePlayer> players;
-	private GamePlayer enemy;
+	private ArrayList<EntityInformation> players;
+	private EntityInformation enemy;
 	
 	/**
 	 * Creates a new FreshConnectionResults object.
@@ -27,7 +27,7 @@ public class FreshConnectionResults implements Serializable {
 	 * @param players the players.
 	 * @param enemy the enemy.
 	 */
-	public FreshConnectionResults(int port, ArrayList<GamePlayer> players, GamePlayer enemy) {
+	public FreshConnectionResults(int port, ArrayList<EntityInformation> players, EntityInformation enemy) {
 		if (players == null) {
 			throw new IllegalArgumentException("players should not be null.");
 		}
@@ -60,7 +60,7 @@ public class FreshConnectionResults implements Serializable {
 	 * 
 	 * @return the players.
 	 */
-	public ArrayList<GamePlayer> getPlayers() {
+	public ArrayList<EntityInformation> getPlayers() {
 		return this.players;
 	}
 
@@ -72,7 +72,7 @@ public class FreshConnectionResults implements Serializable {
 	 * 
 	 * @return the enemy.
 	 */
-	public GamePlayer getEnemy() {
+	public EntityInformation getEnemy() {
 		return this.enemy;
 	}
 	

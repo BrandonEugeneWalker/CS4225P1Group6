@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import edu.westga.cs4225.project1.group6.client.ServerConnection;
 import edu.westga.cs4225.project1.group6.model.GameLog;
-import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
 import edu.westga.cs4225.project1.group6.model.TurnResults;
 
@@ -20,10 +20,10 @@ import edu.westga.cs4225.project1.group6.model.TurnResults;
 public class GamePageController {
 
 	private GameLog rpgGameLog;
-	private List<GamePlayer> rpgGamePlayers;
+	private List<EntityInformation> rpgGamePlayers;
 	private ServerConnection rpgServerConnection;
-	private GamePlayer localPlayer;
-	private GamePlayer monster;
+	private EntityInformation localPlayer;
+	private EntityInformation monster;
 	
 	private static GamePageController singletonController = null;
 	
@@ -51,7 +51,7 @@ public class GamePageController {
 	 * @param rpgServerConnection the server connection for the player.
 	 * @return the created GamePageController.
 	 */
-	public static GamePageController initialize(GamePlayer localPlayer, ServerConnection rpgServerConnection) {
+	public static GamePageController initialize(EntityInformation localPlayer, ServerConnection rpgServerConnection) {
 		if (singletonController != null) {
 			throw new RuntimeException("Controller is already initialized. Initialization only happens once.");
 		}
@@ -68,7 +68,7 @@ public class GamePageController {
 	 * @param localPlayer         the player playing the game on this client
 	 * @param rpgServerConnection the connection to the server
 	 */
-	private GamePageController(GamePlayer localPlayer, ServerConnection rpgServerConnection) {
+	private GamePageController(EntityInformation localPlayer, ServerConnection rpgServerConnection) {
 		if (localPlayer == null) {
 			throw new IllegalArgumentException("Cannot play the game without a player!");
 		}
@@ -78,7 +78,7 @@ public class GamePageController {
 		this.localPlayer = localPlayer;
 		this.rpgServerConnection = rpgServerConnection;
 		this.rpgGameLog = new GameLog();
-		this.rpgGamePlayers = new ArrayList<GamePlayer>();
+		this.rpgGamePlayers = new ArrayList<EntityInformation>();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class GamePageController {
 	 * @precondition none
 	 * @return the local player
 	 */
-	public GamePlayer getLocalPlayer() {
+	public EntityInformation getLocalPlayer() {
 		return this.localPlayer;
 	}
 
@@ -97,11 +97,11 @@ public class GamePageController {
 	 * @precondition none
 	 * @return the non-local players
 	 */
-	public List<GamePlayer> getRpgGamePlayers() {
+	public List<EntityInformation> getRpgGamePlayers() {
 		return this.rpgGamePlayers;
 	}
 	
-	public GamePlayer getMonster() {
+	public EntityInformation getMonster() {
 		return this.monster;
 	}
 
@@ -112,7 +112,7 @@ public class GamePageController {
 	 * @postcondition the local player is set
 	 * @param player the player to set
 	 */
-	public void setLocalGamePlayer(GamePlayer player) {
+	public void setLocalGamePlayer(EntityInformation player) {
 		if (player == null) {
 			throw new IllegalArgumentException("The player to set cannot be null!");
 		}
@@ -170,8 +170,8 @@ public class GamePageController {
 		}
 	}
 	
-	public void updateInformation(ArrayList<GamePlayer> players, GamePlayer enemy) {
-		for (GamePlayer player : players) {
+	public void updateInformation(ArrayList<EntityInformation> players, EntityInformation enemy) {
+		for (EntityInformation player : players) {
 			if (player.getPlayerName().equals(localPlayer.getPlayerName())) {
 				this.localPlayer = player;
 			} else {

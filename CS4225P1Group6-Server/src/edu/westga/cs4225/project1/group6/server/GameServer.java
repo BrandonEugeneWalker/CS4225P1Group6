@@ -15,7 +15,7 @@ import edu.westga.cs4225.project1.group6.game.Game;
 import edu.westga.cs4225.project1.group6.game.entities.Player;
 import edu.westga.cs4225.project1.group6.game.roles.Role;
 import edu.westga.cs4225.project1.group6.model.FreshConnectionResults;
-import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.EntityInformation;
 
 /**
  * This is the game's server class. It 
@@ -74,7 +74,7 @@ public class GameServer {
 			if (this.game.isFull()) {
 				this.sendServerFullNotice(client);
 			} else {
-				this.sendPrivatePort(client, clientPort);
+				this.sendInitializationInformation(client, clientPort);
 			}
 			clientPort++;
 			
@@ -93,35 +93,37 @@ public class GameServer {
 		}
 	}
 	
-	private void sendPrivatePort(Socket socket, int port) throws IOException, ClassNotFoundException {
-		ClientConnectionPort clientConnection = new ClientConnectionPort(port);
+	private void sendInitializationInformation(Socket socket, int port) throws IOException, ClassNotFoundException {
+		ClientConnection clientConnection = new ClientConnection(port);
 		this.pool.execute(clientConnection);
 		
 		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-			GamePlayer playerInformation = (GamePlayer) in.readObject();
+			EntityInformation playerInformation = (EntityInformation) in.readObject();
 			Player player = new Player(playerInformation.getPlayerName(), Role.createRole(playerInformation.getPlayerRole()), clientConnection);
 			this.game.addPlayer(player);
 			
 			System.out.println(playerInformation.getPlayerName() + " was added to the game.");
-			
-			ArrayList<GamePlayer> playerDescriptions = new ArrayList<GamePlayer>();
-			Collection<Player> players = this.game.getPlayers();
-			for (Player currentPlayer : players) {
-				GamePlayer currentPlayerDescription = new GamePlayer(currentPlayer.getName(), currentPlayer.getRole());
-				currentPlayerDescription.setPlayerHealth(currentPlayer.getHealthRemaining());
-				currentPlayerDescription.setPlayerMana(currentPlayer.getManaRemaining());
-				
-				playerDescriptions.add(currentPlayerDescription);
-			}
-			Entity enemy = this.game.getEnemy();
-			GamePlayer enemyDescription = new GamePlayer("Boss", enemy.getRole());
-			enemyDescription.setPlayerHealth(enemy.getHealthRemaining());
-			enemyDescription.setPlayerMana(enemy.getManaRemaining());
-			
-			FreshConnectionResults starterInformation = new FreshConnectionResults(port, playerDescriptions, enemyDescription);
-			out.writeObject(starterInformation);
+			out.writeObject(this.getInitializationInformation(port));
 		}
+	}
+	
+	private FreshConnectionResults getInitializationInformation(int port) {
+		ArrayList<EntityInformation> playerDescriptions = new ArrayList<EntityInformation>();
+		Collection<Player> players = this.game.getPlayers();
+		for (Player currentPlayer : players) {
+			EntityInformation currentPlayerDescription = new EntityInformation(currentPlayer.getName(), currentPlayer.getRole());
+			currentPlayerDescription.setPlayerHealth(currentPlayer.getHealthRemaining());
+			currentPlayerDescription.setPlayerMana(currentPlayer.getManaRemaining());
+			
+			playerDescriptions.add(currentPlayerDescription);
+		}
+		Entity enemy = this.game.getEnemy();
+		EntityInformation enemyDescription = new EntityInformation("Boss", enemy.getRole());
+		enemyDescription.setPlayerHealth(enemy.getHealthRemaining());
+		enemyDescription.setPlayerMana(enemy.getManaRemaining());
+		
+		return new FreshConnectionResults(port, playerDescriptions, enemyDescription);
 	}
 
 	/**

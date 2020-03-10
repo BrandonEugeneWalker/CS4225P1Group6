@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import edu.westga.cs4225.project1.group6.game.Entity;
 import edu.westga.cs4225.project1.group6.game.roles.Role;
 import edu.westga.cs4225.project1.group6.model.GameLog;
-import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
 import edu.westga.cs4225.project1.group6.model.TurnResults;
-import edu.westga.cs4225.project1.group6.server.ClientConnectionPort;
+import edu.westga.cs4225.project1.group6.server.ClientConnection;
 
 /**
  * A player class. These will represent the clients.
@@ -18,8 +18,10 @@ import edu.westga.cs4225.project1.group6.server.ClientConnectionPort;
  */
 public class Player extends Entity {
 
+	private static final int TIMEOUT_MS = 30000;
+	
 	private String name;
-	private ClientConnectionPort connection;
+	private ClientConnection connection;
 	
 	private volatile MoveType selectedMove;
 	
@@ -33,7 +35,7 @@ public class Player extends Entity {
 	 * @param role the player's role.
 	 * @param connection the player's connection service.
 	 */
-	public Player(String name, Role role, ClientConnectionPort connection) {
+	public Player(String name, Role role, ClientConnection connection) {
 		super(role);
 		if (name == null) {
 			throw new IllegalArgumentException("name should not be null.");
@@ -58,7 +60,7 @@ public class Player extends Entity {
 	 * @param players the players in the game.
 	 * @param enemy the enemy in the game.
 	 */
-	public void sendResults(GameLog log, ArrayList<GamePlayer> players, GamePlayer enemy) {
+	public void sendResults(GameLog log, ArrayList<EntityInformation> players, EntityInformation enemy) {
 		TurnResults results = new TurnResults(log, players, enemy);
 		this.connection.setCurrentResult(results);
 	}
@@ -76,7 +78,9 @@ public class Player extends Entity {
 		while (this.selectedMove == null) {
 			long currentTime = System.currentTimeMillis();
 			long difference = currentTime - startingTime;
-			// Can use difference to enforce timeout.
+			if (difference >= TIMEOUT_MS) {
+				return null;
+			}
 		}
 		
 		MoveType move = this.selectedMove;

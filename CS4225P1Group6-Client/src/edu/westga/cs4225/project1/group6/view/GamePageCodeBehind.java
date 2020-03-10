@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.westga.cs4225.project1.group6.controller.GamePageController;
-import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -51,29 +51,39 @@ public class GamePageCodeBehind {
 
     @FXML
     void leaveGameClicked(MouseEvent event) {
-
+    	
     }
 
     @FXML
     void primaryActionClicked(MouseEvent event) {
+    	this.disableAll(true);
     	GamePageController.get().submitMove(MoveType.REGULAR);
     	this.updateNodes();
+    	this.disableAll(false);
     }
 
     @FXML
     void secondaryActionClicked(MouseEvent event) {
+    	this.disableAll(true);
     	GamePageController.get().submitMove(MoveType.SPECIAL);
     	this.updateNodes();
+    	this.disableAll(false);
+    }
+    
+    private void disableAll(boolean isDisabled) {
+    	this.leaveGameButton.setDisable(isDisabled);
+    	this.primaryActionButton.setDisable(isDisabled);
+    	this.secondaryActionButton.setDisable(isDisabled);
     }
 
     private void updateNodes() {
-    	GamePlayer monster = GamePageController.get().getMonster();
+    	EntityInformation monster = GamePageController.get().getMonster();
     	this.monsterStatusTextArea.textProperty().setValue(monster.getPlayerName() + System.lineSeparator()
     			+ "Health: " + monster.getPlayerHealth() + System.lineSeparator()
     			+ "Mana: " + monster.getPlayerMana() + System.lineSeparator()
     			+ "Role: " + monster.getPlayerRole());
     	
-    	GamePlayer localPlayer = GamePageController.get().getLocalPlayer();
+    	EntityInformation localPlayer = GamePageController.get().getLocalPlayer();
     	this.playerStatusTextArea.textProperty().setValue(localPlayer.getPlayerDescription());
     	
     	List<TextArea> allies = new ArrayList<TextArea>();
@@ -81,7 +91,7 @@ public class GamePageCodeBehind {
     	allies.add(this.allyTwoTextArea);
     	allies.add(this.allyThreeTextArea);
     	
-    	List<GamePlayer> players = GamePageController.get().getRpgGamePlayers();
+    	List<EntityInformation> players = GamePageController.get().getRpgGamePlayers();
     	for (int i = 0; i < players.size(); i++) {
     		allies.get(i).textProperty().setValue(players.get(i).getPlayerDescription());
     	}

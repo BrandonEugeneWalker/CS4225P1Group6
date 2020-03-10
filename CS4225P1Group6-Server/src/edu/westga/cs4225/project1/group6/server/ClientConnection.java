@@ -18,8 +18,10 @@ import edu.westga.cs4225.project1.group6.model.TurnResults;
  * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
-public class ClientConnectionPort implements Runnable {
+public class ClientConnection implements Runnable {
 
+	private static final int TIMEOUT_MS = 300000;
+	
 	private int port;
 	private ServerSocket server;
 	
@@ -35,7 +37,7 @@ public class ClientConnectionPort implements Runnable {
 	 * 
 	 * @param port the port at which the private client-server connection is created.
 	 */
-	public ClientConnectionPort(int port) {
+	public ClientConnection(int port) {
 		if (port <= 0) {
 			throw new IllegalArgumentException("port should not be less than or equal to 0.");
 		}
@@ -104,7 +106,9 @@ public class ClientConnectionPort implements Runnable {
 				while (this.currentResult == null) {
 					long currentTime = System.currentTimeMillis();
 					long difference = currentTime - startingTime;
-					// A hang here means its the player turns are not finishing.
+					if (difference >= TIMEOUT_MS) {
+						throw new RuntimeException("5 Minute Shutdown.");
+					}
 				}
 				
 				out.writeObject(this.currentResult);

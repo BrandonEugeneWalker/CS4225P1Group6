@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import edu.westga.cs4225.project1.group6.client.ServerConnection;
 import edu.westga.cs4225.project1.group6.controller.GamePageController;
 import edu.westga.cs4225.project1.group6.model.FreshConnectionResults;
-import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.PlayerRole;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,7 +51,7 @@ public class ConnectionPageCodeBehind {
 	@FXML
 	void onConnectButtonAction(ActionEvent event) {
 		try {
-			GamePlayer player = new GamePlayer(this.nameTextField.getText(), this.classComboBox.getSelectionModel().getSelectedItem());
+			EntityInformation player = new EntityInformation(this.nameTextField.getText(), this.classComboBox.getSelectionModel().getSelectedItem());
 			ServerConnection connection = new ServerConnection();
 			FreshConnectionResults result = connection.attemptToInitializeConnection(player, this.hostTextField.getText(), Integer.parseInt(this.portTextField.getText()));
 			GamePageController controller = GamePageController.initialize(player, connection);

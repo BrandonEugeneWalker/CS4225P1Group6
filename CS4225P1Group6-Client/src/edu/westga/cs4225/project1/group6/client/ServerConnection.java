@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import edu.westga.cs4225.project1.group6.model.FreshConnectionResults;
-import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
 import edu.westga.cs4225.project1.group6.model.TurnResults;
 
@@ -80,7 +80,7 @@ public class ServerConnection {
 	 * 
 	 * @return the fresh connection results.
 	 */
-	public FreshConnectionResults attemptToInitializeConnection(GamePlayer player, String host, int port) throws CouldNotConnectException {
+	public FreshConnectionResults attemptToInitializeConnection(EntityInformation player, String host, int port) throws CouldNotConnectException {
 		if (player == null) {
 			throw new IllegalArgumentException("player should not be null.");
 		}
@@ -98,7 +98,7 @@ public class ServerConnection {
 		}
 	}
 	
-	private FreshConnectionResults initializeConnection(GamePlayer player, String host, int port) throws IOException, ClassNotFoundException {
+	private FreshConnectionResults initializeConnection(EntityInformation player, String host, int port) throws IOException, ClassNotFoundException {
 		this.host = host;
 		FreshConnectionResults results = null;
 		Socket loginSocket = new Socket(host, port);

@@ -13,7 +13,7 @@ import edu.westga.cs4225.project1.group6.game.entities.Player;
 import edu.westga.cs4225.project1.group6.game.roles.Warrior;
 import edu.westga.cs4225.project1.group6.game.roles.moves.NotEnoughManaException;
 import edu.westga.cs4225.project1.group6.model.GameLog;
-import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
 
 /**
@@ -25,7 +25,7 @@ import edu.westga.cs4225.project1.group6.model.MoveType;
  */
 public class Game implements Runnable {
 
-	private static final int PLAYER_LIMIT = 4;
+	private static final int PLAYER_LIMIT = 2;
 	private static final Object LOCK = new Object();
 	
 	private List<Player> players;
@@ -52,53 +52,60 @@ public class Game implements Runnable {
 	
 	@Override
 	public void run() {
-		// TODO: Refactor this out into helper methods.
 		while (this.enemy.isAlive()) {
 			this.turnCount++;
+			
 			this.log.appendLine("Starting Turn " + this.turnCount);
-			// Player damage step
-			while (!this.turnQueue.isEmpty()) {
-				Player currentPlayer = this.getNextPlayer();
-				MoveType type = currentPlayer.waitForMove();
-				try {
-					if (type == MoveType.REGULAR) {
-						currentPlayer.performPrimaryMove(this.enemy);
-						this.log.appendLine(currentPlayer.getName() + " used a primary move.");
-					} else if (type == MoveType.SPECIAL) {
-						currentPlayer.performSpecialMove(this.enemy);
-						this.log.appendLine(currentPlayer.getName() + " used a special move.");
-					} else {
-						// A move was not made.
-					}
-				} catch (NotEnoughManaException e) {
-					this.log.appendLine(currentPlayer.getName() + " did not have enough mana to make the move.");
-				}
-			}
-			this.repopulateTurnQueue();
-			
-			// Boss damage step
-			Random generator = new Random();
-			int randomIndex = generator.nextInt(this.players.size());
-			Player target = this.players.get(randomIndex);
-			this.enemy.performPrimaryMove(target);
-			this.log.appendLine("The boss targeted " + target.getName());
-			
+			this.performPlayerTurns();
+			this.performBossTurn();
 			this.log.appendLine("End of Turn " + this.turnCount + System.lineSeparator());
 			
-			// Send End of Turn Results
-			ArrayList<GamePlayer> info = new ArrayList<GamePlayer>();
-			for (Player player : this.players) {
-				GamePlayer currentInformation = new GamePlayer(player.getName(), player.getRole());
-				currentInformation.setPlayerHealth(player.getHealthRemaining());
-				currentInformation.setPlayerMana(player.getManaRemaining());
-				info.add(currentInformation);
+			this.sendTurnResults();
+		}
+	}
+	
+	private void performPlayerTurns() {
+		while (!this.turnQueue.isEmpty()) {
+			Player currentPlayer = this.getNextPlayer();
+			MoveType type = currentPlayer.waitForMove();
+			try {
+				if (type == MoveType.REGULAR) {
+					currentPlayer.performPrimaryMove(this.enemy);
+					this.log.appendLine(currentPlayer.getName() + " used a primary move.");
+				} else if (type == MoveType.SPECIAL) {
+					currentPlayer.performSpecialMove(this.enemy);
+					this.log.appendLine(currentPlayer.getName() + " used a special move.");
+				} else {
+					this.log.appendLine(currentPlayer.getName() + " did not make a move.");
+				}
+			} catch (NotEnoughManaException e) {
+				this.log.appendLine(currentPlayer.getName() + " did not have enough mana to make the move.");
 			}
-			GamePlayer enemyInformation = new GamePlayer("Boss", this.enemy.getRole());
-			enemyInformation.setPlayerHealth(this.enemy.getHealthRemaining());
-			enemyInformation.setPlayerMana(this.enemy.getManaRemaining());
-			for (Player player : this.players) {
-				player.sendResults(this.log, info, enemyInformation);
-			}
+		}
+		this.repopulateTurnQueue();
+	}
+	
+	private void performBossTurn() {
+		Random generator = new Random();
+		int randomIndex = generator.nextInt(this.players.size());
+		Player target = this.players.get(randomIndex);
+		this.enemy.performPrimaryMove(target);
+		this.log.appendLine("The boss targeted " + target.getName());
+	}
+	
+	private void sendTurnResults() {
+		ArrayList<EntityInformation> info = new ArrayList<EntityInformation>();
+		for (Player player : this.players) {
+			EntityInformation currentInformation = new EntityInformation(player.getName(), player.getRole());
+			currentInformation.setPlayerHealth(player.getHealthRemaining());
+			currentInformation.setPlayerMana(player.getManaRemaining());
+			info.add(currentInformation);
+		}
+		EntityInformation enemyInformation = new EntityInformation("Boss", this.enemy.getRole());
+		enemyInformation.setPlayerHealth(this.enemy.getHealthRemaining());
+		enemyInformation.setPlayerMana(this.enemy.getManaRemaining());
+		for (Player player : this.players) {
+			player.sendResults(this.log, info, enemyInformation);
 		}
 	}
 	
@@ -136,7 +143,7 @@ public class Game implements Runnable {
 	 */
 	public boolean isReady() {
 		synchronized (LOCK) {
-			return this.players.size() > 1;
+			return this.players.size() == PLAYER_LIMIT;
 		}
 	}
 	

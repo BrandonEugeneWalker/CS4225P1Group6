@@ -15,8 +15,8 @@ public class TurnResults implements Serializable {
 	private static final long serialVersionUID = -112328579945164540L;
 	
 	private GameLog log;
-	private ArrayList<GamePlayer> players;
-	private GamePlayer enemy;
+	private ArrayList<EntityInformation> players;
+	private EntityInformation enemy;
 	
 	/**
 	 * Creates a new TurnResults object with the specified log and players.
@@ -28,7 +28,7 @@ public class TurnResults implements Serializable {
 	 * @param players all of the players in the game.
 	 * @param enemy the enemy
 	 */
-	public TurnResults(GameLog log, ArrayList<GamePlayer> players, GamePlayer enemy) {
+	public TurnResults(GameLog log, ArrayList<EntityInformation> players, EntityInformation enemy) {
 		if (log == null) {
 			throw new IllegalArgumentException("log should not be null.");
 		}
@@ -64,7 +64,7 @@ public class TurnResults implements Serializable {
 	 * 
 	 * @return the players.
 	 */
-	public ArrayList<GamePlayer> getPlayers() {
+	public ArrayList<EntityInformation> getPlayers() {
 		return this.players;
 	}
 	
@@ -76,7 +76,7 @@ public class TurnResults implements Serializable {
 	 * 
 	 * @return the enemy.
 	 */
-	public GamePlayer getEnemy() {
+	public EntityInformation getEnemy() {
 		return this.enemy;
 	}
 	
