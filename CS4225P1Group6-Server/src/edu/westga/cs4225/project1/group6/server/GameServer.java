@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import edu.westga.cs4225.project1.group6.game.Game;
+import edu.westga.cs4225.project1.group6.game.entities.Player;
+import edu.westga.cs4225.project1.group6.game.roles.Role;
 import edu.westga.cs4225.project1.group6.model.GamePlayer;
 
 /**
@@ -27,6 +30,8 @@ public class GameServer {
 
 	private ExecutorService pool;
 	
+	private Game game;
+	
 	/**
 	 * Creates a new GameServer. The server is bound
 	 * to the specified port. 
@@ -44,6 +49,7 @@ public class GameServer {
 		this.server = null;
 		this.port = port;
 		this.pool = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+		this.game = new Game();
 	}
 	
 	/**
@@ -61,18 +67,40 @@ public class GameServer {
 		int clientPort = this.port + 1;
 		while (!this.server.isClosed()) {
 			Socket client = this.server.accept();
-			ClientConnectionPort clientConnection = new ClientConnectionPort(clientPort);
-			this.pool.execute(clientConnection);
-			
-			try (ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-					ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())) {
-				
-				GamePlayer player = (GamePlayer) in.readObject();
-				// TODO: Add this player to the game somehow
-				System.out.println(player.getPlayerDescription());
-				out.writeObject(clientPort);
+			if (this.game.isFull()) {
+				this.sendServerFullNotice(client);
+			} else {
+				this.sendPrivatePort(client, clientPort);
 			}
 			clientPort++;
+			
+			if (this.game.isReady()) {
+				this.pool.execute(this.game);
+			}
+		}
+	}
+	
+	private void sendServerFullNotice(Socket socket) throws IOException, ClassNotFoundException {
+		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+			in.readObject();
+			System.out.println("Server is full. Sending notice.");
+			out.writeObject(-1);
+		}
+	}
+	
+	private void sendPrivatePort(Socket socket, int port) throws IOException, ClassNotFoundException {
+		ClientConnectionPort clientConnection = new ClientConnectionPort(port);
+		this.pool.execute(clientConnection);
+		
+		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+			GamePlayer playerInformation = (GamePlayer) in.readObject();
+			Player player = new Player(playerInformation.getPlayerName(), Role.createRole(playerInformation.getPlayerRole()), clientConnection);
+			this.game.addPlayer(player);
+			
+			System.out.println(playerInformation.getPlayerDescription());
+			out.writeObject(port);
 		}
 	}
 

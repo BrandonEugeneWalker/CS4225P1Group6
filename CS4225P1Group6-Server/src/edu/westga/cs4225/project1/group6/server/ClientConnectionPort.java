@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.function.Consumer;
 
 import edu.westga.cs4225.project1.group6.model.MoveType;
 import edu.westga.cs4225.project1.group6.model.TurnResults;
@@ -22,6 +23,9 @@ public class ClientConnectionPort implements Runnable {
 	private int port;
 	private ServerSocket server;
 	
+	private Consumer<MoveType> onMoveRead;
+	private TurnResults currentResult;
+	
 	/**
 	 * Creates a new ClientConnection that is bound to the 
 	 * specified port.
@@ -37,6 +41,39 @@ public class ClientConnectionPort implements Runnable {
 		}
 		
 		this.port = port;
+		this.currentResult = null;
+	}
+	
+	/**
+	 * Sets the onMoveRead callback that will respond to the on move read event.
+	 * 
+	 * @precondition onMoveRead != null
+	 * @postcondition none
+	 * 
+	 * @param onMoveRead the callback that will execute when a move is read.
+	 */
+	public void setOnMoveRead(Consumer<MoveType> onMoveRead) {
+		if (onMoveRead == null) {
+			throw new IllegalArgumentException("onMoveRead should not be null.");
+		}
+		
+		this.onMoveRead = onMoveRead;
+	}
+	
+	/**
+	 * Sets the results to send back to the client.
+	 * 
+	 * @precondition results != null
+	 * @postcondition none
+	 * 
+	 * @param results the results to send back to the client.
+	 */
+	public void setCurrentResult(TurnResults results) {
+		if (results == null) {
+			throw new IllegalArgumentException("results should not be null.");
+		}
+		
+		this.currentResult = results;
 	}
 	
 	@Override
@@ -59,12 +96,19 @@ public class ClientConnectionPort implements Runnable {
 			try (ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 					ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())) {
 				MoveType type = (MoveType) in.readObject();
+				if (this.onMoveRead != null) {
+					this.onMoveRead.accept(type);
+				}
 				
-				// TODO: Execute the move for this client.
-				// Wait until server gives the heads up and execute the following two lines
-				// to send results back to the client.
-				//TurnResults results = new TurnResults(log, players);
-				//out.writeObject(results);
+				long startingTime = System.currentTimeMillis();
+				while (this.currentResult == null) {
+					long currentTime = System.currentTimeMillis();
+					long difference = currentTime - startingTime;
+					// A hang here means its the player turns are not finishing.
+				}
+				
+				out.writeObject(this.currentResult);
+				this.currentResult = null;
 			}
 		}
 	}

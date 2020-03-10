@@ -1,8 +1,12 @@
 package edu.westga.cs4225.project1.group6.game;
 
+import edu.westga.cs4225.project1.group6.game.roles.Healer;
+import edu.westga.cs4225.project1.group6.game.roles.Mage;
 import edu.westga.cs4225.project1.group6.game.roles.Role;
+import edu.westga.cs4225.project1.group6.game.roles.Warrior;
 import edu.westga.cs4225.project1.group6.game.roles.moves.Move;
 import edu.westga.cs4225.project1.group6.game.roles.moves.NotEnoughManaException;
+import edu.westga.cs4225.project1.group6.model.PlayerRole;
 
 /**
  * This abstraction represents any entity in the game.
@@ -174,6 +178,28 @@ public abstract class Entity {
 	 */
 	public int getManaRemaining() {
 		return this.manaRemaining;
+	}
+	
+	/**
+	 * Gets this entity's role enum.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return this entity's role enum.
+	 */
+	public PlayerRole getRole() {
+		if (this.role instanceof Warrior) {
+			return PlayerRole.Warrior;
+		}
+		if (this.role instanceof Mage) {
+			return PlayerRole.Mage;
+		}
+		if (this.role instanceof Healer) {
+			return PlayerRole.Healer;
+		}
+		
+		return null;
 	}
 
 	protected boolean performMove(Move move, Entity target) {

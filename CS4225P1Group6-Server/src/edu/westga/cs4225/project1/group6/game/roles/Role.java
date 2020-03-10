@@ -1,6 +1,7 @@
 package edu.westga.cs4225.project1.group6.game.roles;
 
 import edu.westga.cs4225.project1.group6.game.roles.moves.Move;
+import edu.westga.cs4225.project1.group6.model.PlayerRole;
 
 /**
  * Represents a generic role that a player or enemy can
@@ -51,6 +52,28 @@ public abstract class Role {
 		this.manaMultiplier = manaMultiplier;
 		this.primaryMove = primaryMove;
 		this.specialMove = specialMove;
+	}
+	
+	/**
+	 * Creates a role object based on the specified role enum.
+	 * 
+	 * @precondition role != null
+	 * @postcondition none
+	 * 
+	 * @param role the player's role selector.
+	 * @return the corresponding role object.
+	 */
+	public static Role createRole(PlayerRole role) {
+		switch (role) {
+			case Warrior:
+				return new Warrior();
+			case Mage:
+				return new Mage();
+			case Healer:
+				return new Healer();
+			default:
+				throw new IllegalArgumentException("role should not be null.");
+		}
 	}
 
 	/**

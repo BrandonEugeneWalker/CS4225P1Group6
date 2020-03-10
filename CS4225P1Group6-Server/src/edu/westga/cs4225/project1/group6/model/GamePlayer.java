@@ -76,6 +76,18 @@ public class GamePlayer implements Serializable {
 	public int getPlayerHealth() {
 		return this.playerHealth;
 	}
+	
+	/**
+	 * Sets the player's health to the specified value.
+	 * 
+	 * @precondition none
+	 * @postcondition getPlayerHealth() == health
+	 * 
+	 * @param health the player's new health value.
+	 */
+	public void setPlayerHealth(int health) {
+		this.playerHealth = health;
+	}
 
 	/**
 	 * Gets the players mana.
@@ -85,6 +97,18 @@ public class GamePlayer implements Serializable {
 	 */
 	public int getPlayerMana() {
 		return this.playerMana;
+	}
+	
+	/**
+	 * Sets the player's mana to the specified value.
+	 * 
+	 * @precondition none
+	 * @postcondition getPlayerMana() == mana
+	 * 
+	 * @param mana the player's new mana value.
+	 */
+	public void setPlayerMana(int mana) {
+		this.playerMana = mana;
 	}
 
 	/**
