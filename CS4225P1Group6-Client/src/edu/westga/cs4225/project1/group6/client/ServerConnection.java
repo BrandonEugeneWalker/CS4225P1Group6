@@ -13,6 +13,7 @@ import edu.westga.cs4225.project1.group6.model.TurnResults;
 
 /**
  * Handles interactions with the server.
+ * 
  * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
@@ -21,10 +22,11 @@ public class ServerConnection {
 	private Socket activeSocket;
 	private int privatePort;
 	private String host;
-	
+
 	/**
 	 * Attempts to send the specified move type to the server. The response will be
-	 * returned once the server has sent it back (when all players have submitted moves).
+	 * returned once the server has sent it back (when all players have submitted
+	 * moves).
 	 * 
 	 * @precondition type != null
 	 * @postcondition none
@@ -32,8 +34,9 @@ public class ServerConnection {
 	 * @param type the type of move the player wants to make.
 	 * @return the end of turn results.
 	 * 
-	 * @throws IOException if a connection error occurs.
-	 * @throws ClassNotFoundException (unlikely) if the object could not be deserialized.
+	 * @throws IOException            if a connection error occurs.
+	 * @throws ClassNotFoundException (unlikely) if the object could not be
+	 *                                deserialized.
 	 */
 	public TurnResults sendMove(MoveType type) throws IOException, ClassNotFoundException {
 		if (type == null) {
@@ -45,16 +48,16 @@ public class ServerConnection {
 				ObjectInputStream in = new ObjectInputStream(this.activeSocket.getInputStream())) {
 			System.out.println("Sending move: " + type);
 			out.writeObject(type);
-			
+
 			System.out.println("Awaiting turn results..");
 			results = (TurnResults) in.readObject();
 		}
 		return results;
 	}
-	
+
 	/**
-	 * Attempts to close this connection. If the connection is
-	 * already closed, then nothing happens.
+	 * Attempts to close this connection. If the connection is already closed, then
+	 * nothing happens.
 	 * 
 	 * @precondition none
 	 * @postcondition sendMove(MoveType) will throw an exception.
@@ -66,7 +69,7 @@ public class ServerConnection {
 			System.out.println("Socket Already Closed.");
 		}
 	}
-	
+
 	/**
 	 * Attempts to initialize the connection with the server.
 	 * 
@@ -74,13 +77,14 @@ public class ServerConnection {
 	 * @postcondition none
 	 * 
 	 * @param player needed to send to the server.
-	 * @param host the server host.
-	 * @param port the server login port.
+	 * @param host   the server host.
+	 * @param port   the server login port.
 	 * @throws CouldNotConnectException if the connection was not made succesfully.
 	 * 
 	 * @return the fresh connection results.
 	 */
-	public FreshConnectionResults attemptToInitializeConnection(EntityInformation player, String host, int port) throws CouldNotConnectException {
+	public FreshConnectionResults attemptToInitializeConnection(EntityInformation player, String host, int port)
+			throws CouldNotConnectException {
 		if (player == null) {
 			throw new IllegalArgumentException("player should not be null.");
 		}
@@ -90,15 +94,16 @@ public class ServerConnection {
 		if (port < 0) {
 			throw new IllegalArgumentException("port should not be negative.");
 		}
-		
+
 		try {
 			return this.initializeConnection(player, host, port);
 		} catch (ClassNotFoundException | IOException e) {
 			throw new CouldNotConnectException(e.getMessage());
 		}
 	}
-	
-	private FreshConnectionResults initializeConnection(EntityInformation player, String host, int port) throws IOException, ClassNotFoundException {
+
+	private FreshConnectionResults initializeConnection(EntityInformation player, String host, int port)
+			throws IOException, ClassNotFoundException {
 		this.host = host;
 		FreshConnectionResults results = null;
 		Socket loginSocket = new Socket(host, port);
@@ -106,7 +111,7 @@ public class ServerConnection {
 				ObjectInputStream in = new ObjectInputStream(loginSocket.getInputStream())) {
 			System.out.println("Attempting Login..");
 			out.writeObject(player);
-			
+
 			results = (FreshConnectionResults) in.readObject();
 			this.privatePort = results.getPort();
 			if (this.privatePort == -1) {
@@ -119,7 +124,7 @@ public class ServerConnection {
 		}
 		return results;
 	}
-	
+
 	private void makeConnection() throws UnknownHostException, IOException {
 		this.activeSocket = new Socket(this.host, this.privatePort);
 	}

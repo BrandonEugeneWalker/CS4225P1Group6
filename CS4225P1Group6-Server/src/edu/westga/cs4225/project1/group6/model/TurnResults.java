@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Data class that is used to report the end of turn state of all
- * players and the state of the game back to a client.
+ * Data class that is used to report the end of turn state of all players and
+ * the state of the game back to a client.
  * 
  * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
@@ -13,20 +13,21 @@ import java.util.ArrayList;
 public class TurnResults implements Serializable {
 
 	private static final long serialVersionUID = -112328579945164540L;
-	
+
 	private GameLog log;
 	private ArrayList<EntityInformation> players;
 	private EntityInformation enemy;
-	
+
 	/**
 	 * Creates a new TurnResults object with the specified log and players.
 	 * 
 	 * @precondition log != null && players != null && enemy != null
-	 * @postcondition getLog().equals(log) && getPlayers().equals(players) && getEnemy().equals(enemy)
+	 * @postcondition getLog().equals(log) && getPlayers().equals(players) &&
+	 *                getEnemy().equals(enemy)
 	 * 
-	 * @param log the game's log.
+	 * @param log     the game's log.
 	 * @param players all of the players in the game.
-	 * @param enemy the enemy
+	 * @param enemy   the enemy
 	 */
 	public TurnResults(GameLog log, ArrayList<EntityInformation> players, EntityInformation enemy) {
 		if (log == null) {
@@ -38,7 +39,7 @@ public class TurnResults implements Serializable {
 		if (enemy == null) {
 			throw new IllegalArgumentException("enemy should not be null.");
 		}
-		
+
 		this.log = log;
 		this.players = players;
 		this.enemy = enemy;
@@ -67,7 +68,7 @@ public class TurnResults implements Serializable {
 	public ArrayList<EntityInformation> getPlayers() {
 		return this.players;
 	}
-	
+
 	/**
 	 * Gets the enemy.
 	 * 
@@ -79,5 +80,5 @@ public class TurnResults implements Serializable {
 	public EntityInformation getEnemy() {
 		return this.enemy;
 	}
-	
+
 }

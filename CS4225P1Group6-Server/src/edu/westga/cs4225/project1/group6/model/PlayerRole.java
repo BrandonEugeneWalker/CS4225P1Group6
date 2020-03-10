@@ -36,4 +36,3 @@ public enum PlayerRole {
 		return returnString;
 	}
 }
-

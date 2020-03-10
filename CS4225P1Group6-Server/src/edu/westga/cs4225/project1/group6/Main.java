@@ -13,13 +13,13 @@ import edu.westga.cs4225.project1.group6.server.GameServer;
 public class Main {
 
 	private static final int PORT = 4225;
-	
+
 	/**
 	 * Starting point for the server application.
 	 * 
 	 * @param args program arguments.
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
 	 */
 	public static void main(String[] args) {
 		GameServer server = new GameServer(PORT);

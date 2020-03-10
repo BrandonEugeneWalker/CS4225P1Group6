@@ -16,16 +16,24 @@ public class TwoHandedSwing extends Move {
 	private static final double ACCURACY = 0.7;
 	private static final int DAMAGE = 55;
 	private static final int MANA_COST = 0;
-	
+
 	/**
-	 * Creates a new TwoHandedSwing object. This is the
-	 * warrior role's special attack. If this move hits,
-	 * then the warrior loses five percent of his health.
+	 * Creates a new TwoHandedSwing object. This is the warrior role's special
+	 * attack. If this move hits, then the warrior loses five percent of his health.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is performed
 	 */
 	public TwoHandedSwing() {
 		super(ACCURACY, DAMAGE, MANA_COST);
 	}
 
+	/**
+	 * Performs the given action on the given entity.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is done
+	 */
 	@Override
 	public void performMove(Entity source, Entity target) {
 		Random accuracyRoller = new Random();

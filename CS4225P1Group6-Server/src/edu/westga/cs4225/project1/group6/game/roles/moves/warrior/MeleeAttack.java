@@ -16,15 +16,24 @@ public class MeleeAttack extends Move {
 	private static final double ACCURACY = 0.9;
 	private static final int DAMAGE = 10;
 	private static final int MANA_COST = 0;
-	
+
 	/**
-	 * Creates a new MeleeAttack object. This 
-	 * attack is the warrior role's primary attack.
+	 * Creates a new MeleeAttack object. This attack is the warrior role's primary
+	 * attack.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is performed
 	 */
 	public MeleeAttack() {
 		super(ACCURACY, DAMAGE, MANA_COST);
 	}
 
+	/**
+	 * Performs the given action on the given entity.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is done
+	 */
 	@Override
 	public void performMove(Entity source, Entity target) {
 		Random accuracyRoller = new Random();

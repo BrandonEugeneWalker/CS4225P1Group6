@@ -16,19 +16,27 @@ public class MeteorStrike extends Move {
 	private static final double ACCURACY = 0.8;
 	private static final int DAMAGE = 95;
 	private static final int MANA_COST = 100;
-	
+
 	private static final int CRITICAL_HEALTH_LIMIT = 20;
-	
+
 	/**
-	 * Creates a new MeteorStrike object. This is the
-	 * special attack for the mage role. If the mage's health
-	 * is less than or equal to a critical health limit, then
-	 * this move does double its normal damage.
+	 * Creates a new MeteorStrike object. This is the special attack for the mage
+	 * role. If the mage's health is less than or equal to a critical health limit,
+	 * then this move does double its normal damage.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is performed
 	 */
 	public MeteorStrike() {
 		super(ACCURACY, DAMAGE, MANA_COST);
 	}
 
+	/**
+	 * Performs the given action on the given entity.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is done
+	 */
 	@Override
 	public void performMove(Entity source, Entity target) {
 		Random accuracyRoller = new Random();

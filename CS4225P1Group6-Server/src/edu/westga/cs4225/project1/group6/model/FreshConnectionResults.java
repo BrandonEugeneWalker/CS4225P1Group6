@@ -12,20 +12,21 @@ import java.util.ArrayList;
 public class FreshConnectionResults implements Serializable {
 
 	private static final long serialVersionUID = 5147776477998742402L;
-	
+
 	private int port;
 	private ArrayList<EntityInformation> players;
 	private EntityInformation enemy;
-	
+
 	/**
 	 * Creates a new FreshConnectionResults object.
 	 * 
 	 * @precondition players != null && enemy != null
-	 * @postcondition getPort() == port && getPlayers().equals(players) && getEnemy().equals(enemy)
+	 * @postcondition getPort() == port && getPlayers().equals(players) &&
+	 *                getEnemy().equals(enemy)
 	 * 
-	 * @param port the port.
+	 * @param port    the port.
 	 * @param players the players.
-	 * @param enemy the enemy.
+	 * @param enemy   the enemy.
 	 */
 	public FreshConnectionResults(int port, ArrayList<EntityInformation> players, EntityInformation enemy) {
 		if (players == null) {
@@ -34,7 +35,7 @@ public class FreshConnectionResults implements Serializable {
 		if (enemy == null) {
 			throw new IllegalArgumentException("enemy should not be null.");
 		}
-		
+
 		this.port = port;
 		this.players = players;
 		this.enemy = enemy;
@@ -75,5 +76,5 @@ public class FreshConnectionResults implements Serializable {
 	public EntityInformation getEnemy() {
 		return this.enemy;
 	}
-	
+
 }

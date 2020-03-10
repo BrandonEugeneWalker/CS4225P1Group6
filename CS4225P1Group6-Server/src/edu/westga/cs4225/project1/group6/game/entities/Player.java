@@ -19,20 +19,20 @@ import edu.westga.cs4225.project1.group6.server.ClientConnection;
 public class Player extends Entity {
 
 	private static final int TIMEOUT_MS = 30000;
-	
+
 	private String name;
 	private ClientConnection connection;
-	
+
 	private volatile MoveType selectedMove;
-	
+
 	/**
 	 * Creates a new Player object.
 	 * 
 	 * @precondition role != null && name != null && connection != null
 	 * @postcondition none
 	 * 
-	 * @param name the Player's name.
-	 * @param role the player's role.
+	 * @param name       the Player's name.
+	 * @param role       the player's role.
 	 * @param connection the player's connection service.
 	 */
 	public Player(String name, Role role, ClientConnection connection) {
@@ -43,7 +43,7 @@ public class Player extends Entity {
 		if (connection == null) {
 			throw new IllegalArgumentException("connection should not be null.");
 		}
-		
+
 		this.name = name;
 		this.connection = connection;
 		this.connection.setOnMoveRead(move -> this.selectedMove = move);
@@ -56,15 +56,15 @@ public class Player extends Entity {
 	 * @precondition log != null && players != null && enemy != null
 	 * @postcondition none
 	 * 
-	 * @param log the game log.
+	 * @param log     the game log.
 	 * @param players the players in the game.
-	 * @param enemy the enemy in the game.
+	 * @param enemy   the enemy in the game.
 	 */
 	public void sendResults(GameLog log, ArrayList<EntityInformation> players, EntityInformation enemy) {
 		TurnResults results = new TurnResults(log, players, enemy);
 		this.connection.setCurrentResult(results);
 	}
-	
+
 	/**
 	 * Waits for the player to make a move.
 	 * 
@@ -82,7 +82,7 @@ public class Player extends Entity {
 				return null;
 			}
 		}
-		
+
 		MoveType move = this.selectedMove;
 		this.selectedMove = null;
 		return move;
@@ -99,5 +99,5 @@ public class Player extends Entity {
 	public String getName() {
 		return this.name;
 	}
-	
+
 }

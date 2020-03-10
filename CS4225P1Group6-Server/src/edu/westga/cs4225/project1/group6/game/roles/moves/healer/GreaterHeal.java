@@ -16,19 +16,27 @@ public class GreaterHeal extends Move {
 	private static final double ACCURACY = 1;
 	private static final int DAMAGE = -100;
 	private static final int MANA_COST = 100;
-	
+
 	private static final int RECOIL_DAMAGE = 10;
-	
+
 	/**
-	 * Creates a new GreaterHeal move object. This is the 
-	 * special attack for the healer role. This move has a
-	 * tiring effect on the healer, it deals recoil damage to
-	 * the healer when it is performed.
+	 * Creates a new GreaterHeal move object. This is the special attack for the
+	 * healer role. This move has a tiring effect on the healer, it deals recoil
+	 * damage to the healer when it is performed.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is done
 	 */
 	public GreaterHeal() {
 		super(ACCURACY, DAMAGE, MANA_COST);
 	}
 
+	/**
+	 * Performs the given action on the given entity.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is done
+	 */
 	@Override
 	public void performMove(Entity source, Entity target) {
 		Random accuracyRoller = new Random();

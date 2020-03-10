@@ -18,8 +18,7 @@ import edu.westga.cs4225.project1.group6.model.FreshConnectionResults;
 import edu.westga.cs4225.project1.group6.model.EntityInformation;
 
 /**
- * This is the game's server class. It 
- * continuously listens for connections and
+ * This is the game's server class. It continuously listens for connections and
  * handles them when it receives them.
  * 
  * @author Luke Whaley, Brandon Walker, Kevin Flynn
@@ -33,12 +32,11 @@ public class GameServer {
 	private int port;
 
 	private ExecutorService pool;
-	
+
 	private Game game;
-	
+
 	/**
-	 * Creates a new GameServer. The server is bound
-	 * to the specified port. 
+	 * Creates a new GameServer. The server is bound to the specified port.
 	 * 
 	 * @precondition port > 0
 	 * @postcondition none
@@ -49,21 +47,21 @@ public class GameServer {
 		if (port <= 0) {
 			throw new IllegalArgumentException("port should not be less than or equal to 0.");
 		}
-		
+
 		this.server = null;
 		this.port = port;
 		this.pool = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 		this.game = new Game();
 	}
-	
+
 	/**
 	 * Starts the GameServer to listen for incoming transmissions.
 	 * 
 	 * @precondition none
 	 * @postcondition the server starts
 	 * 
-	 * @throws IOException if an I/O error occurs.
-	 * @throws ClassNotFoundException 
+	 * @throws IOException            if an I/O error occurs.
+	 * @throws ClassNotFoundException
 	 */
 	public void start() throws IOException, ClassNotFoundException {
 		System.out.println("Server Running - Port: " + this.port);
@@ -77,13 +75,13 @@ public class GameServer {
 				this.sendInitializationInformation(client, clientPort);
 			}
 			clientPort++;
-			
+
 			if (this.game.isReady()) {
 				this.pool.execute(this.game);
 			}
 		}
 	}
-	
+
 	private void sendServerFullNotice(Socket socket) throws IOException, ClassNotFoundException {
 		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
@@ -92,37 +90,39 @@ public class GameServer {
 			out.writeObject(-1);
 		}
 	}
-	
+
 	private void sendInitializationInformation(Socket socket, int port) throws IOException, ClassNotFoundException {
 		ClientConnection clientConnection = new ClientConnection(port);
 		this.pool.execute(clientConnection);
-		
+
 		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
 			EntityInformation playerInformation = (EntityInformation) in.readObject();
-			Player player = new Player(playerInformation.getPlayerName(), Role.createRole(playerInformation.getPlayerRole()), clientConnection);
+			Player player = new Player(playerInformation.getPlayerName(),
+					Role.createRole(playerInformation.getPlayerRole()), clientConnection);
 			this.game.addPlayer(player);
-			
+
 			System.out.println(playerInformation.getPlayerName() + " was added to the game.");
 			out.writeObject(this.getInitializationInformation(port));
 		}
 	}
-	
+
 	private FreshConnectionResults getInitializationInformation(int port) {
 		ArrayList<EntityInformation> playerDescriptions = new ArrayList<EntityInformation>();
 		Collection<Player> players = this.game.getPlayers();
 		for (Player currentPlayer : players) {
-			EntityInformation currentPlayerDescription = new EntityInformation(currentPlayer.getName(), currentPlayer.getRole());
+			EntityInformation currentPlayerDescription = new EntityInformation(currentPlayer.getName(),
+					currentPlayer.getRole());
 			currentPlayerDescription.setPlayerHealth(currentPlayer.getHealthRemaining());
 			currentPlayerDescription.setPlayerMana(currentPlayer.getManaRemaining());
-			
+
 			playerDescriptions.add(currentPlayerDescription);
 		}
 		Entity enemy = this.game.getEnemy();
 		EntityInformation enemyDescription = new EntityInformation("Boss", enemy.getRole());
 		enemyDescription.setPlayerHealth(enemy.getHealthRemaining());
 		enemyDescription.setPlayerMana(enemy.getManaRemaining());
-		
+
 		return new FreshConnectionResults(port, playerDescriptions, enemyDescription);
 	}
 

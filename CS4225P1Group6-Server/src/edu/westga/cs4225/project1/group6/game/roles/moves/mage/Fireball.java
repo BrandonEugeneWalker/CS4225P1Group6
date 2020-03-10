@@ -16,17 +16,25 @@ public class Fireball extends Move {
 	private static final double ACCURACY = 1;
 	private static final int DAMAGE = 30;
 	private static final int MANA_COST = 15;
-	
+
 	/**
-	 * Creates a new Fireball object. This is the primary
-	 * attack for the mage role. There is a ten percent chance
-	 * that this move will deal an additional ten percent of the 
-	 * targets remaining health.
+	 * Creates a new Fireball object. This is the primary attack for the mage role.
+	 * There is a ten percent chance that this move will deal an additional ten
+	 * percent of the targets remaining health.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is performed
 	 */
 	public Fireball() {
 		super(ACCURACY, DAMAGE, MANA_COST);
 	}
 
+	/**
+	 * Performs the given action on the given entity.
+	 * 
+	 * @precondition none
+	 * @postcondition the action is done
+	 */
 	@Override
 	public void performMove(Entity source, Entity target) {
 		Random accuracyRoller = new Random();

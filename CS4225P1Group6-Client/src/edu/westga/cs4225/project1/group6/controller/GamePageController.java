@@ -24,9 +24,9 @@ public class GamePageController {
 	private ServerConnection rpgServerConnection;
 	private EntityInformation localPlayer;
 	private EntityInformation monster;
-	
+
 	private static GamePageController singletonController = null;
-	
+
 	/**
 	 * Gets the global GamePageController.
 	 * 
@@ -38,16 +38,17 @@ public class GamePageController {
 	public static GamePageController get() {
 		return singletonController;
 	}
-	
+
 	/**
-	 * Initializes the global GamePageController. This should only happen once.
-	 * A runtime exception will occur if this is called more than once. The rpgGamePlayers
-	 * contains all of the players in the game even this client player.
+	 * Initializes the global GamePageController. This should only happen once. A
+	 * runtime exception will occur if this is called more than once. The
+	 * rpgGamePlayers contains all of the players in the game even this client
+	 * player.
 	 * 
 	 * @precondition localPlayer != null && rpgServerConnection != null
 	 * @postcondition GamePageController.get() != null
 	 * 
-	 * @param localPlayer the GamePlayer to give the controller.
+	 * @param localPlayer         the GamePlayer to give the controller.
 	 * @param rpgServerConnection the server connection for the player.
 	 * @return the created GamePageController.
 	 */
@@ -55,13 +56,13 @@ public class GamePageController {
 		if (singletonController != null) {
 			throw new RuntimeException("Controller is already initialized. Initialization only happens once.");
 		}
-		
+
 		singletonController = new GamePageController(localPlayer, rpgServerConnection);
 		return singletonController;
 	}
-	
+
 	/**
-	 * Creates a new isntance of the GamePageController
+	 * Creates a new instance of the GamePageController
 	 * 
 	 * @precondition the local player and server cannot be null
 	 * @postcondition the game controller is created
@@ -100,7 +101,13 @@ public class GamePageController {
 	public List<EntityInformation> getRpgGamePlayers() {
 		return this.rpgGamePlayers;
 	}
-	
+
+	/**
+	 * Gets the monster.
+	 * 
+	 * @precondition none
+	 * @return the monster
+	 */
 	public EntityInformation getMonster() {
 		return this.monster;
 	}
@@ -156,20 +163,35 @@ public class GamePageController {
 		this.rpgGameLog = updatedLog;
 	}
 
-	
+	/**
+	 * Submits the move to the server.
+	 * 
+	 * @precondition none
+	 * @postcondition the move is sent
+	 * @param type the move type to send
+	 */
 	public void submitMove(MoveType type) {
 		try {
 			TurnResults results = this.rpgServerConnection.sendMove(type);
 			this.rpgGameLog = results.getLog();
 			this.rpgGamePlayers = results.getPlayers();
-			this.localPlayer = this.rpgGamePlayers.stream().filter(player -> player.getPlayerName().equals(this.localPlayer.getPlayerName())).collect(Collectors.toList()).get(0);
+			this.localPlayer = this.rpgGamePlayers.stream()
+					.filter(player -> player.getPlayerName().equals(this.localPlayer.getPlayerName()))
+					.collect(Collectors.toList()).get(0);
 			this.rpgGamePlayers.removeIf(player -> player.getPlayerName().equals(this.localPlayer.getPlayerName()));
 			this.monster = results.getEnemy();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Updates the game information.
+	 * 
+	 * @precondition none
+	 * @param players the players of the game
+	 * @param enemy   the monster
+	 */
 	public void updateInformation(ArrayList<EntityInformation> players, EntityInformation enemy) {
 		for (EntityInformation player : players) {
 			if (player.getPlayerName().equals(localPlayer.getPlayerName())) {
@@ -181,20 +203,14 @@ public class GamePageController {
 		this.monster = enemy;
 	}
 
-	public void updateRpgGameLog() {
-		// TODO
-	}
-
-	public void updateRpgGamePlayers() {
-		// TODO
-	}
-
-	public void updateLocalPlayer() {
-		// TODO
-	}
-
-	public void transmitQuitMessage() {
-		// TODO
+	/**
+	 * Closes the connection with the server.
+	 * 
+	 * @precondition none
+	 * @postcondition the connection is closed.
+	 */
+	public void closeServerConnection() {
+		this.rpgServerConnection.attemptToCloseConnection();
 	}
 
 }

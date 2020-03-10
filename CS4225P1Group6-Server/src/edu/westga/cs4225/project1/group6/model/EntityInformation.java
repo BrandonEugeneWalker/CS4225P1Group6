@@ -76,7 +76,7 @@ public class EntityInformation implements Serializable {
 	public int getPlayerHealth() {
 		return this.playerHealth;
 	}
-	
+
 	/**
 	 * Sets the player's health to the specified value.
 	 * 
@@ -98,7 +98,7 @@ public class EntityInformation implements Serializable {
 	public int getPlayerMana() {
 		return this.playerMana;
 	}
-	
+
 	/**
 	 * Sets the player's mana to the specified value.
 	 * 
@@ -129,4 +129,3 @@ public class EntityInformation implements Serializable {
 	}
 
 }
-

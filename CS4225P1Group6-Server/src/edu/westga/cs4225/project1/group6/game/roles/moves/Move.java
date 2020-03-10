@@ -3,8 +3,8 @@ package edu.westga.cs4225.project1.group6.game.roles.moves;
 import edu.westga.cs4225.project1.group6.game.Entity;
 
 /**
- * Represents a generic move. Each move has an accuracy value,
- * a damage value, and a manaCost value.
+ * Represents a generic move. Each move has an accuracy value, a damage value,
+ * and a manaCost value.
  * 
  * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
@@ -12,22 +12,23 @@ import edu.westga.cs4225.project1.group6.game.Entity;
 public abstract class Move {
 
 	private double accuracy;
-	
+
 	private int damage;
 	private int manaCost;
-	
+
 	/**
-	 * Accuracy values should be between 0 < accuracy <= 1. An accuracy of
-	 * 1 will always hit a target unless there are some other factors preventing
-	 * the damage to go through. The damage is the base damage that this move
-	 * does assuming there are no other factors reducing the damage. The manacost
-	 * is the cost to perform the move. Mana cost can be zero.
+	 * Accuracy values should be between 0 < accuracy <= 1. An accuracy of 1 will
+	 * always hit a target unless there are some other factors preventing the damage
+	 * to go through. The damage is the base damage that this move does assuming
+	 * there are no other factors reducing the damage. The manacost is the cost to
+	 * perform the move. Mana cost can be zero.
 	 * 
 	 * @precondition accuracy > 0 && accuracy <= 1 && manaCost >= 0
-	 * @postcondition getAccuracy() == accuracy && getDamage() == damage && getManaCost() == manaCost
+	 * @postcondition getAccuracy() == accuracy && getDamage() == damage &&
+	 *                getManaCost() == manaCost
 	 * 
 	 * @param accuracy the move's accuracy.
-	 * @param damage the move's damage.
+	 * @param damage   the move's damage.
 	 * @param manaCost the move's mana cost.
 	 */
 	protected Move(double accuracy, int damage, int manaCost) {
@@ -37,12 +38,12 @@ public abstract class Move {
 		if (manaCost < 0) {
 			throw new IllegalArgumentException("manaCost should not be less than zero.");
 		}
-		
+
 		this.accuracy = accuracy;
 		this.damage = damage;
 		this.manaCost = manaCost;
 	}
-	
+
 	/**
 	 * Performs this move on the specified target.
 	 * 
@@ -89,5 +90,5 @@ public abstract class Move {
 	public int getManaCost() {
 		return this.manaCost;
 	}
-	
+
 }

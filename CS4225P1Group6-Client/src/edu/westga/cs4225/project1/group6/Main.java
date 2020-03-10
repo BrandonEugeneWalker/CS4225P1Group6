@@ -1,6 +1,5 @@
 package edu.westga.cs4225.project1.group6;
 
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -17,24 +16,24 @@ import javafx.stage.Stage;
  *
  */
 public class Main extends Application {
-	
+
 	private static final String TITLE = "Multiplayer RPG";
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Path connectionPath = Paths.get(".", "view","fxml","ConnectionPage.fxml");
+			Path connectionPath = Paths.get(".", "view", "fxml", "ConnectionPage.fxml");
 			FXMLLoader loader = new FXMLLoader(Main.class.getResource(connectionPath.toString()));
 			Pane pane = loader.load();
 			Scene scene = new Scene(pane);
 			primaryStage.setTitle(TITLE);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Starting point for the application.
 	 * 

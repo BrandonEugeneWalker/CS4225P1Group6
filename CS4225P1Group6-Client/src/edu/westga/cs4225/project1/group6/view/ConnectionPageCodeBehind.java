@@ -19,7 +19,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -51,26 +50,28 @@ public class ConnectionPageCodeBehind {
 	@FXML
 	void onConnectButtonAction(ActionEvent event) {
 		try {
-			EntityInformation player = new EntityInformation(this.nameTextField.getText(), this.classComboBox.getSelectionModel().getSelectedItem());
+			EntityInformation player = new EntityInformation(this.nameTextField.getText(),
+					this.classComboBox.getSelectionModel().getSelectedItem());
 			ServerConnection connection = new ServerConnection();
-			FreshConnectionResults result = connection.attemptToInitializeConnection(player, this.hostTextField.getText(), Integer.parseInt(this.portTextField.getText()));
+			FreshConnectionResults result = connection.attemptToInitializeConnection(player,
+					this.hostTextField.getText(), Integer.parseInt(this.portTextField.getText()));
 			GamePageController controller = GamePageController.initialize(player, connection);
 			controller.updateInformation(result.getPlayers(), result.getEnemy());
-			
-			java.nio.file.Path connectionPath = Paths.get(".", "view","fxml","GamePage.fxml");
+
+			java.nio.file.Path connectionPath = Paths.get(".", "view", "fxml", "GamePage.fxml");
 			FXMLLoader loader = new FXMLLoader();
-			
+
 			loader.setLocation(edu.westga.cs4225.project1.group6.Main.class.getResource(connectionPath.toString()));
 			Pane loadedPane = loader.load();
-			
+
 			Scene scene = new Scene(loadedPane);
 			Stage currentStage = (Stage) this.pane.getScene().getWindow();
 			currentStage.setScene(scene);
 			currentStage.centerOnScreen();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK);
-			alert.showAndWait();	
-		}	
+			alert.showAndWait();
+		}
 	}
 
 	@FXML
