@@ -1,4 +1,10 @@
 package edu.westga.cs4225.project1.group6.view;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.westga.cs4225.project1.group6.controller.GamePageController;
+import edu.westga.cs4225.project1.group6.model.GamePlayer;
+import edu.westga.cs4225.project1.group6.model.MoveType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -37,9 +43,11 @@ public class GamePageCodeBehind {
 
     @FXML
     private Button leaveGameButton;
-
+    
     @FXML
-    private TextArea roleDetailsTextArea;
+    void initialize() {
+    	this.updateNodes();
+    }
 
     @FXML
     void leaveGameClicked(MouseEvent event) {
@@ -48,13 +56,38 @@ public class GamePageCodeBehind {
 
     @FXML
     void primaryActionClicked(MouseEvent event) {
-
+    	GamePageController.get().submitMove(MoveType.REGULAR);
+    	this.updateNodes();
     }
 
     @FXML
     void secondaryActionClicked(MouseEvent event) {
-
+    	GamePageController.get().submitMove(MoveType.SPECIAL);
+    	this.updateNodes();
     }
 
+    private void updateNodes() {
+    	GamePlayer monster = GamePageController.get().getMonster();
+    	this.monsterStatusTextArea.textProperty().setValue(monster.getPlayerName() + System.lineSeparator()
+    			+ "Health: " + monster.getPlayerHealth() + System.lineSeparator()
+    			+ "Mana: " + monster.getPlayerMana() + System.lineSeparator()
+    			+ "Role: " + monster.getPlayerRole());
+    	
+    	GamePlayer localPlayer = GamePageController.get().getLocalPlayer();
+    	this.playerStatusTextArea.textProperty().setValue(localPlayer.getPlayerDescription());
+    	
+    	List<TextArea> allies = new ArrayList<TextArea>();
+    	allies.add(this.allyOneTextArea);
+    	allies.add(this.allyTwoTextArea);
+    	allies.add(this.allyThreeTextArea);
+    	
+    	List<GamePlayer> players = GamePageController.get().getRpgGamePlayers();
+    	for (int i = 0; i < players.size(); i++) {
+    		allies.get(i).textProperty().setValue(players.get(i).getPlayerDescription());
+    	}
+    	
+    	this.battleLogTextArea.textProperty().setValue(GamePageController.get().getRpgGameLog().getGameLog());
+    	this.battleLogTextArea.appendText("");
+    }
 }
 

@@ -83,7 +83,7 @@ public class Game implements Runnable {
 			this.enemy.performPrimaryMove(target);
 			this.log.appendLine("The boss targeted " + target.getName());
 			
-			this.log.appendLine("End of Turn " + this.turnCount);
+			this.log.appendLine("End of Turn " + this.turnCount + System.lineSeparator());
 			
 			// Send End of Turn Results
 			ArrayList<GamePlayer> info = new ArrayList<GamePlayer>();
@@ -93,8 +93,11 @@ public class Game implements Runnable {
 				currentInformation.setPlayerMana(player.getManaRemaining());
 				info.add(currentInformation);
 			}
+			GamePlayer enemyInformation = new GamePlayer("Boss", this.enemy.getRole());
+			enemyInformation.setPlayerHealth(this.enemy.getHealthRemaining());
+			enemyInformation.setPlayerMana(this.enemy.getManaRemaining());
 			for (Player player : this.players) {
-				player.sendResults(this.log, info);
+				player.sendResults(this.log, info, enemyInformation);
 			}
 		}
 	}
@@ -133,7 +136,7 @@ public class Game implements Runnable {
 	 */
 	public boolean isReady() {
 		synchronized (LOCK) {
-			return this.players.size() > 0;
+			return this.players.size() > 1;
 		}
 	}
 	
@@ -162,6 +165,18 @@ public class Game implements Runnable {
 	 */
 	public Collection<Player> getPlayers() {
 		return Collections.unmodifiableCollection(this.players);
+	}
+	
+	/**
+	 * Gets the enemy in the game.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return the enemy.
+	 */
+	public Entity getEnemy() {
+		return this.enemy;
 	}
 	
 	private Player getNextPlayer() {

@@ -4,34 +4,30 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Data class that is used to report the end of turn state of all
- * players and the state of the game back to a client.
+ * Sent back to the client after a first initial connection.
  * 
  * @author Luke Whaley, Brandon Walker, Kevin Flynn
  *
  */
-public class TurnResults implements Serializable {
+public class FreshConnectionResults implements Serializable {
 
-	private static final long serialVersionUID = -112328579945164540L;
+	private static final long serialVersionUID = 5147776477998742402L;
 	
-	private GameLog log;
+	private int port;
 	private ArrayList<GamePlayer> players;
 	private GamePlayer enemy;
 	
 	/**
-	 * Creates a new TurnResults object with the specified log and players.
+	 * Creates a new FreshConnectionResults object.
 	 * 
-	 * @precondition log != null && players != null && enemy != null
-	 * @postcondition getLog().equals(log) && getPlayers().equals(players) && getEnemy().equals(enemy)
+	 * @precondition players != null && enemy != null
+	 * @postcondition getPort() == port && getPlayers().equals(players) && getEnemy().equals(enemy)
 	 * 
-	 * @param log the game's log.
-	 * @param players all of the players in the game.
-	 * @param enemy the enemy
+	 * @param port the port.
+	 * @param players the players.
+	 * @param enemy the enemy.
 	 */
-	public TurnResults(GameLog log, ArrayList<GamePlayer> players, GamePlayer enemy) {
-		if (log == null) {
-			throw new IllegalArgumentException("log should not be null.");
-		}
+	public FreshConnectionResults(int port, ArrayList<GamePlayer> players, GamePlayer enemy) {
 		if (players == null) {
 			throw new IllegalArgumentException("players should not be null.");
 		}
@@ -39,21 +35,21 @@ public class TurnResults implements Serializable {
 			throw new IllegalArgumentException("enemy should not be null.");
 		}
 		
-		this.log = log;
+		this.port = port;
 		this.players = players;
 		this.enemy = enemy;
 	}
 
 	/**
-	 * Gets the game log.
+	 * Gets the port.
 	 * 
 	 * @precondition none
 	 * @postcondition none
 	 * 
-	 * @return the game log.
+	 * @return the port.
 	 */
-	public GameLog getLog() {
-		return this.log;
+	public int getPort() {
+		return this.port;
 	}
 
 	/**
@@ -67,7 +63,7 @@ public class TurnResults implements Serializable {
 	public ArrayList<GamePlayer> getPlayers() {
 		return this.players;
 	}
-	
+
 	/**
 	 * Gets the enemy.
 	 * 

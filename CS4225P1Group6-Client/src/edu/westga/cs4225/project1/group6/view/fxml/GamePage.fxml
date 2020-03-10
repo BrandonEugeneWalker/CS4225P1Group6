@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="edu.westga.cs4225.project1.group6.view.GamePageCodeBehind">
+<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs4225.project1.group6.view.GamePageCodeBehind">
    <children>
       <TextArea fx:id="allyOneTextArea" editable="false" layoutX="1021.0" layoutY="78.0" prefHeight="179.0" prefWidth="243.0" wrapText="true">
          <font>
@@ -74,17 +73,17 @@
             <Font size="14.0" />
          </font>
       </TextArea>
-      <Button fx:id="secondaryActionButton" layoutX="270.0" layoutY="641.0" mnemonicParsing="false" onMouseClicked="#secondaryActionClicked" prefHeight="47.0" prefWidth="175.0" text="Secondary Action">
+      <Button fx:id="secondaryActionButton" layoutX="270.0" layoutY="641.0" mnemonicParsing="false" onMouseClicked="#secondaryActionClicked" prefHeight="47.0" prefWidth="243.0" text="Secondary Action">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="primaryActionButton" layoutX="273.0" layoutY="553.0" mnemonicParsing="false" onMouseClicked="#primaryActionClicked" prefHeight="47.0" prefWidth="175.0" text="Primary Action">
+      <Button fx:id="primaryActionButton" layoutX="273.0" layoutY="553.0" mnemonicParsing="false" onMouseClicked="#primaryActionClicked" prefHeight="47.0" prefWidth="243.0" text="Primary Action">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="leaveGameButton" layoutX="486.0" layoutY="553.0" mnemonicParsing="false" onMouseClicked="#leaveGameClicked" prefHeight="47.0" prefWidth="175.0" text="Leave Game">
+      <Button fx:id="leaveGameButton" layoutX="822.0" layoutY="553.0" mnemonicParsing="false" onMouseClicked="#leaveGameClicked" prefHeight="47.0" prefWidth="175.0" text="Leave Game">
          <font>
             <Font size="18.0" />
          </font>
@@ -94,20 +93,10 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="486.0" layoutY="515.0" text="System Controls:">
+      <Label layoutX="822.0" layoutY="514.0" text="System Controls:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="18.0" layoutY="501.0" text="Role Details:">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <TextArea fx:id="roleDetailsTextArea" editable="false" layoutX="17.0" layoutY="528.0" prefHeight="179.0" prefWidth="243.0" wrapText="true">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextArea>
    </children>
 </AnchorPane>

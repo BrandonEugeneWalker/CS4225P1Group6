@@ -5,12 +5,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import edu.westga.cs4225.project1.group6.game.Entity;
 import edu.westga.cs4225.project1.group6.game.Game;
 import edu.westga.cs4225.project1.group6.game.entities.Player;
 import edu.westga.cs4225.project1.group6.game.roles.Role;
+import edu.westga.cs4225.project1.group6.model.FreshConnectionResults;
 import edu.westga.cs4225.project1.group6.model.GamePlayer;
 
 /**
@@ -99,8 +103,24 @@ public class GameServer {
 			Player player = new Player(playerInformation.getPlayerName(), Role.createRole(playerInformation.getPlayerRole()), clientConnection);
 			this.game.addPlayer(player);
 			
-			System.out.println(playerInformation.getPlayerDescription());
-			out.writeObject(port);
+			System.out.println(playerInformation.getPlayerName() + " was added to the game.");
+			
+			ArrayList<GamePlayer> playerDescriptions = new ArrayList<GamePlayer>();
+			Collection<Player> players = this.game.getPlayers();
+			for (Player currentPlayer : players) {
+				GamePlayer currentPlayerDescription = new GamePlayer(currentPlayer.getName(), currentPlayer.getRole());
+				currentPlayerDescription.setPlayerHealth(currentPlayer.getHealthRemaining());
+				currentPlayerDescription.setPlayerMana(currentPlayer.getManaRemaining());
+				
+				playerDescriptions.add(currentPlayerDescription);
+			}
+			Entity enemy = this.game.getEnemy();
+			GamePlayer enemyDescription = new GamePlayer("Boss", enemy.getRole());
+			enemyDescription.setPlayerHealth(enemy.getHealthRemaining());
+			enemyDescription.setPlayerMana(enemy.getManaRemaining());
+			
+			FreshConnectionResults starterInformation = new FreshConnectionResults(port, playerDescriptions, enemyDescription);
+			out.writeObject(starterInformation);
 		}
 	}
 

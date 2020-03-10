@@ -23,7 +23,8 @@ public class GamePageController {
 	private List<GamePlayer> rpgGamePlayers;
 	private ServerConnection rpgServerConnection;
 	private GamePlayer localPlayer;
-
+	private GamePlayer monster;
+	
 	private static GamePageController singletonController = null;
 	
 	/**
@@ -78,7 +79,6 @@ public class GamePageController {
 		this.rpgServerConnection = rpgServerConnection;
 		this.rpgGameLog = new GameLog();
 		this.rpgGamePlayers = new ArrayList<GamePlayer>();
-		this.rpgGamePlayers.add(localPlayer);
 	}
 
 	/**
@@ -99,6 +99,10 @@ public class GamePageController {
 	 */
 	public List<GamePlayer> getRpgGamePlayers() {
 		return this.rpgGamePlayers;
+	}
+	
+	public GamePlayer getMonster() {
+		return this.monster;
 	}
 
 	/**
@@ -159,9 +163,22 @@ public class GamePageController {
 			this.rpgGameLog = results.getLog();
 			this.rpgGamePlayers = results.getPlayers();
 			this.localPlayer = this.rpgGamePlayers.stream().filter(player -> player.getPlayerName().equals(this.localPlayer.getPlayerName())).collect(Collectors.toList()).get(0);
+			this.rpgGamePlayers.removeIf(player -> player.getPlayerName().equals(this.localPlayer.getPlayerName()));
+			this.monster = results.getEnemy();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void updateInformation(ArrayList<GamePlayer> players, GamePlayer enemy) {
+		for (GamePlayer player : players) {
+			if (player.getPlayerName().equals(localPlayer.getPlayerName())) {
+				this.localPlayer = player;
+			} else {
+				this.rpgGamePlayers.add(player);
+			}
+		}
+		this.monster = enemy;
 	}
 
 	public void updateRpgGameLog() {

@@ -24,7 +24,7 @@ public class ClientConnectionPort implements Runnable {
 	private ServerSocket server;
 	
 	private Consumer<MoveType> onMoveRead;
-	private TurnResults currentResult;
+	private volatile TurnResults currentResult;
 	
 	/**
 	 * Creates a new ClientConnection that is bound to the 

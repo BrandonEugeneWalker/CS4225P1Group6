@@ -51,14 +51,15 @@ public class Player extends Entity {
 	/**
 	 * Sends the results to the player connection.
 	 * 
-	 * @precondition log != null && players != null
+	 * @precondition log != null && players != null && enemy != null
 	 * @postcondition none
 	 * 
 	 * @param log the game log.
 	 * @param players the players in the game.
+	 * @param enemy the enemy in the game.
 	 */
-	public void sendResults(GameLog log, ArrayList<GamePlayer> players) {
-		TurnResults results = new TurnResults(log, players);
+	public void sendResults(GameLog log, ArrayList<GamePlayer> players, GamePlayer enemy) {
+		TurnResults results = new TurnResults(log, players, enemy);
 		this.connection.setCurrentResult(results);
 	}
 	
