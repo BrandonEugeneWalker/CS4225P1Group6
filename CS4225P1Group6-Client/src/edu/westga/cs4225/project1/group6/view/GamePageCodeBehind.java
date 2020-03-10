@@ -47,6 +47,8 @@ public class GamePageCodeBehind {
 
 	@FXML
 	private Button leaveGameButton;
+	
+	private boolean isGameOver = false;
 
 	@FXML
 	void initialize() {
@@ -63,7 +65,10 @@ public class GamePageCodeBehind {
 		this.disableAll(true);
 		GamePageController.get().submitMove(MoveType.REGULAR);
 		this.updateNodes();
-		this.disableAll(false);
+		if (!this.isGameOver) {
+			this.disableAll(false);
+		}
+		
 	}
 
 	@FXML
@@ -71,7 +76,9 @@ public class GamePageCodeBehind {
 		this.disableAll(true);
 		GamePageController.get().submitMove(MoveType.SPECIAL);
 		this.updateNodes();
-		this.disableAll(false);
+		if (!this.isGameOver) {
+			this.disableAll(false);
+		}
 	}
 
 	private void disableAll(boolean isDisabled) {
@@ -105,6 +112,7 @@ public class GamePageCodeBehind {
 
 		if (monster.getPlayerHealth() <= 0) {
 			this.triggerGameOver();
+			this.isGameOver = true;
 		}
 	}
 
@@ -116,7 +124,8 @@ public class GamePageCodeBehind {
 		gameOverAlert.setTitle("Game Over!");
 		gameOverAlert.setContentText(
 				"The game has ended! You can review the results in the game's log. Hit leave game when you are ready to close the window.");
-
+		gameOverAlert.show();
+		
 		GamePageController.get().closeServerConnection();
 
 	}
