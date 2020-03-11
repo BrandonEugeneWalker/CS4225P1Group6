@@ -68,13 +68,18 @@ public class Game implements Runnable {
 		while (!this.turnQueue.isEmpty()) {
 			Player currentPlayer = this.getNextPlayer();
 			MoveType type = currentPlayer.waitForMove();
+			int initialHealth = this.enemy.getHealthRemaining();
 			try {
 				if (type == MoveType.REGULAR) {
 					currentPlayer.performPrimaryMove(this.enemy);
-					this.log.appendLine(currentPlayer.getName() + " used a primary move.");
+					int endHealth = this.enemy.getHealthRemaining();
+					int damageDealt = initialHealth - endHealth;
+					this.log.appendLine(currentPlayer.getName() + " used a primary move dealing " + damageDealt + " damage to the enemy.");
 				} else if (type == MoveType.SPECIAL) {
 					currentPlayer.performSpecialMove(this.enemy);
-					this.log.appendLine(currentPlayer.getName() + " used a special move.");
+					int endHealth = this.enemy.getHealthRemaining();
+					int damageDealt = initialHealth - endHealth;
+					this.log.appendLine(currentPlayer.getName() + " used a special move dealing " + damageDealt + " damage to the enemy.");
 				} else {
 					this.log.appendLine(currentPlayer.getName() + " did not make a move.");
 				}
