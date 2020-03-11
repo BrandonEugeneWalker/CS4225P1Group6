@@ -117,7 +117,7 @@ public class Game implements Runnable {
 		this.enemy.performPrimaryMove(target);
 		int finalHealth = target.getHealthRemaining();
 		this.log.appendLine("The boss targeted " + target.getName());
-		this.log.append(target.getName() + " Has lost " + (initalHealth - finalHealth) + " Health.");
+		this.log.appendLine(target.getName() + " Has lost " + (initalHealth - finalHealth) + " Health.");
 	}
 
 	private void sendTurnResults() {
