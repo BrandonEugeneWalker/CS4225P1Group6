@@ -25,7 +25,7 @@ import edu.westga.cs4225.project1.group6.model.MoveType;
  */
 public class Game implements Runnable {
 
-	private static final int PLAYER_LIMIT = 2;
+	private static final int PLAYER_LIMIT = 4;
 	private static final Object LOCK = new Object();
 
 	private List<Player> players;
@@ -35,6 +35,8 @@ public class Game implements Runnable {
 
 	private GameLog log;
 	private int turnCount;
+
+	private boolean isGameOver = false;
 
 	/**
 	 * Creates a new Game.
@@ -50,6 +52,12 @@ public class Game implements Runnable {
 		this.turnCount = 0;
 	}
 
+	/**
+	 * Runs the Game.
+	 * 
+	 * @precondition none
+	 * @postcondition the game is running
+	 */
 	@Override
 	public void run() {
 		while (this.enemy.isAlive()) {
@@ -57,10 +65,15 @@ public class Game implements Runnable {
 
 			this.log.appendLine("Starting Turn " + this.turnCount);
 			this.performPlayerTurns();
-			this.performBossTurn();
-			this.log.appendLine("End of Turn " + this.turnCount + System.lineSeparator());
 
-			this.sendTurnResults();
+			if (this.isGameOver) {
+				this.sendTurnResults();
+			} else {
+				this.performBossTurn();
+				this.log.appendLine("End of Turn " + this.turnCount + System.lineSeparator());
+				this.sendTurnResults();
+			}
+
 		}
 	}
 
@@ -74,12 +87,14 @@ public class Game implements Runnable {
 					currentPlayer.performPrimaryMove(this.enemy);
 					int endHealth = this.enemy.getHealthRemaining();
 					int damageDealt = initialHealth - endHealth;
-					this.log.appendLine(currentPlayer.getName() + " used a primary move dealing " + damageDealt + " damage to the enemy.");
+					this.log.appendLine(currentPlayer.getName() + " used a primary move dealing " + damageDealt
+							+ " damage to the enemy.");
 				} else if (type == MoveType.SPECIAL) {
 					currentPlayer.performSpecialMove(this.enemy);
 					int endHealth = this.enemy.getHealthRemaining();
 					int damageDealt = initialHealth - endHealth;
-					this.log.appendLine(currentPlayer.getName() + " used a special move dealing " + damageDealt + " damage to the enemy.");
+					this.log.appendLine(currentPlayer.getName() + " used a special move dealing " + damageDealt
+							+ " damage to the enemy.");
 				} else {
 					this.log.appendLine(currentPlayer.getName() + " did not make a move.");
 				}
@@ -87,6 +102,10 @@ public class Game implements Runnable {
 				this.log.appendLine(currentPlayer.getName() + " did not have enough mana to make the move.");
 			}
 		}
+		if (this.enemy.isDead()) {
+			this.log.appendLine("The game has ended! You have won!");
+		}
+
 		this.repopulateTurnQueue();
 	}
 
@@ -204,4 +223,5 @@ public class Game implements Runnable {
 			this.players.forEach(player -> this.turnQueue.add(player));
 		}
 	}
+
 }
