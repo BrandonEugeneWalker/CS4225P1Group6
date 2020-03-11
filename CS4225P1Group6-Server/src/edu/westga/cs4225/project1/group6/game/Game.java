@@ -89,8 +89,11 @@ public class Game implements Runnable {
 		Random generator = new Random();
 		int randomIndex = generator.nextInt(this.players.size());
 		Player target = this.players.get(randomIndex);
+		int initalHealth = target.getHealthRemaining();
 		this.enemy.performPrimaryMove(target);
+		int finalHealth = target.getHealthRemaining();
 		this.log.appendLine("The boss targeted " + target.getName());
+		this.log.append(target.getName() + " Has lost " + (initalHealth - finalHealth) + " Health.");
 	}
 
 	private void sendTurnResults() {
