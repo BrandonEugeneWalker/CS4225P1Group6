@@ -7,6 +7,7 @@ import edu.westga.cs4225.project1.group6.client.RunnableTask;
 import edu.westga.cs4225.project1.group6.controller.GamePageController;
 import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -131,16 +132,25 @@ public class GamePageCodeBehind {
 	}
 
 	private void triggerGameOver() {
-		this.primaryActionButton.setDisable(true);
-		this.secondaryActionButton.setDisable(true);
+		var triggerRunnable = new Runnable() {
 
-		Alert gameOverAlert = new Alert(AlertType.INFORMATION);
-		gameOverAlert.setTitle("Game Over!");
-		gameOverAlert.setContentText(
-				"The game has ended! You can review the results in the game's log. Hit leave game when you are ready to close the window.");
-		gameOverAlert.show();
-		
-		GamePageController.get().closeServerConnection();
+			@Override
+			public void run() {
+				primaryActionButton.setDisable(true);
+				secondaryActionButton.setDisable(true);
+
+				Alert gameOverAlert = new Alert(AlertType.INFORMATION);
+				gameOverAlert.setTitle("Game Over!");
+				gameOverAlert.setContentText(
+						"The game has ended! You can review the results in the game's log. Hit leave game when you are ready to close the window.");
+				gameOverAlert.show();
+				
+				GamePageController.get().closeServerConnection();
+				
+			}
+			
+		};
+		Platform.runLater(triggerRunnable);
 
 	}
 }
