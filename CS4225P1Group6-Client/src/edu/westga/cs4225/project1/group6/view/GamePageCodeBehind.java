@@ -3,7 +3,7 @@ package edu.westga.cs4225.project1.group6.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.westga.cs4225.project1.group6.client.RunnableTask;
+import edu.westga.cs4225.project1.group6.client.SignalThread;
 import edu.westga.cs4225.project1.group6.controller.GamePageController;
 import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
@@ -65,13 +65,14 @@ public class GamePageCodeBehind {
 	@FXML
 	void primaryActionClicked(MouseEvent event) {
 		this.disableAll(true);
-		RunnableTask task = new RunnableTask(() -> this.executePrimaryAction(), runnableTask -> {
+		SignalThread task = new SignalThread();
+		task.setOnComplete(() -> {
 			if (!this.isGameOver) {
 				this.disableAll(false);
 			}
+			this.leaveGameButton.setDisable(false);
 		});
-		Thread actionThread = new Thread(task);
-		actionThread.start();
+		task.start(() -> this.executePrimaryAction());
 	}
 	
 	private void executePrimaryAction() {
@@ -82,13 +83,14 @@ public class GamePageCodeBehind {
 	@FXML
 	void secondaryActionClicked(MouseEvent event) {
 		this.disableAll(true);
-		RunnableTask task = new RunnableTask(() -> this.executeSecondaryAction(), runnableTask -> {
+		SignalThread task = new SignalThread();
+		task.setOnComplete(() -> {
 			if (!this.isGameOver) {
 				this.disableAll(false);
 			}
+			this.leaveGameButton.setDisable(false);
 		});
-		Thread actionThread = new Thread(task);
-		actionThread.start();
+		task.start(() -> this.executeSecondaryAction());
 	}
 	
 	private void executeSecondaryAction() {
@@ -129,6 +131,7 @@ public class GamePageCodeBehind {
 			this.triggerGameOver();
 			this.isGameOver = true;
 		}
+		
 	}
 
 	private void triggerGameOver() {
@@ -140,9 +143,15 @@ public class GamePageCodeBehind {
 				secondaryActionButton.setDisable(true);
 
 				Alert gameOverAlert = new Alert(AlertType.INFORMATION);
+				gameOverAlert.setGraphic(null);
 				gameOverAlert.setTitle("Game Over!");
-				gameOverAlert.setContentText(
-						"The game has ended! You can review the results in the game's log. Hit leave game when you are ready to close the window.");
+				
+				TextArea area = new TextArea();
+				area.setWrapText(true);
+				area.setEditable(false);
+				area.setText("The game has ended! You can review the results in the game's log. Hit leave game when you are ready to close the window.");
+				gameOverAlert.getDialogPane().getChildren().clear();
+				gameOverAlert.getDialogPane().setContent(area);
 				gameOverAlert.show();
 				
 				GamePageController.get().closeServerConnection();

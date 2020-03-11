@@ -51,6 +51,21 @@ public class Game implements Runnable {
 		this.log = new GameLog();
 		this.turnCount = 0;
 	}
+	
+	/**
+	 * Closes all the player connections.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 */
+	public void reset() {
+		this.players.forEach(player -> player.closeConnection());
+		this.players.clear();
+		this.turnQueue.clear();
+		this.turnCount = 0;
+		this.log = new GameLog();
+		this.enemy = new Boss(new Warrior());
+	}
 
 	/**
 	 * Runs the Game.
@@ -69,12 +84,14 @@ public class Game implements Runnable {
 			if (this.isGameOver) {
 				this.sendTurnResults();
 			} else {
-				this.performBossTurn();
+				if (this.enemy.isAlive()) {
+					this.performBossTurn();
+				}
 				this.log.appendLine("End of Turn " + this.turnCount + System.lineSeparator());
 				this.sendTurnResults();
 			}
-
 		}
+		this.reset();
 	}
 
 	private void performPlayerTurns() {
@@ -185,6 +202,20 @@ public class Game implements Runnable {
 	public boolean isFull() {
 		synchronized (LOCK) {
 			return this.players.size() >= PLAYER_LIMIT;
+		}
+	}
+	
+	/**
+	 * Determines if the game is over.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return true if the game is over; false otherwise.
+	 */
+	public boolean isOver() {
+		synchronized (LOCK) {
+			return this.enemy.isDead();
 		}
 	}
 

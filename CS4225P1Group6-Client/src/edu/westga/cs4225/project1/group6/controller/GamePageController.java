@@ -24,6 +24,7 @@ public class GamePageController {
 	private ServerConnection rpgServerConnection;
 	private EntityInformation localPlayer;
 	private EntityInformation monster;
+	private boolean isGameReady;
 
 	private static GamePageController singletonController = null;
 
@@ -82,6 +83,18 @@ public class GamePageController {
 		this.rpgGamePlayers = new ArrayList<EntityInformation>();
 	}
 
+	/**
+	 * Gets whether or not the game is ready to start.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return true if the game is ready; false otherwise.
+	 */
+	public boolean isGameReady() {
+		return this.isGameReady;
+	}
+	
 	/**
 	 * Gets the local player.
 	 * 
@@ -192,7 +205,7 @@ public class GamePageController {
 	 * @param players the players of the game
 	 * @param enemy   the monster
 	 */
-	public void updateInformation(ArrayList<EntityInformation> players, EntityInformation enemy) {
+	public void updateInformation(ArrayList<EntityInformation> players, EntityInformation enemy, boolean isGameReady) {
 		for (EntityInformation player : players) {
 			if (player.getPlayerName().equals(localPlayer.getPlayerName())) {
 				this.localPlayer = player;
@@ -201,6 +214,7 @@ public class GamePageController {
 			}
 		}
 		this.monster = enemy;
+		this.isGameReady = isGameReady;
 	}
 
 	/**

@@ -44,6 +44,20 @@ public class ClientConnection implements Runnable {
 		this.port = port;
 		this.currentResult = null;
 	}
+	
+	/**
+	 * Closes this client connection.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 */
+	public void close() {
+		try {
+			this.server.close();
+		} catch (IOException e) {
+			System.out.println("Already closed.");
+		}
+	}
 
 	/**
 	 * Sets the onMoveRead callback that will respond to the on move read event.

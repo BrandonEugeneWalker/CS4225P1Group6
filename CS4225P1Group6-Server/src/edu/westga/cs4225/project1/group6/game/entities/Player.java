@@ -100,4 +100,13 @@ public class Player extends Entity {
 		return this.name;
 	}
 
+	/**
+	 * Closes this player connection.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 */
+	public void closeConnection() {
+		this.connection.close();
+	}
 }

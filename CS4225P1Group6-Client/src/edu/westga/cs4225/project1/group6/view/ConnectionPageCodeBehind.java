@@ -14,8 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -56,7 +56,7 @@ public class ConnectionPageCodeBehind {
 			FreshConnectionResults result = connection.attemptToInitializeConnection(player,
 					this.hostTextField.getText(), Integer.parseInt(this.portTextField.getText()));
 			GamePageController controller = GamePageController.initialize(player, connection);
-			controller.updateInformation(result.getPlayers(), result.getEnemy());
+			controller.updateInformation(result.getPlayers(), result.getEnemy(), result.isGameReady());
 
 			java.nio.file.Path connectionPath = Paths.get(".", "view", "fxml", "GamePage.fxml");
 			FXMLLoader loader = new FXMLLoader();
@@ -69,7 +69,15 @@ public class ConnectionPageCodeBehind {
 			currentStage.setScene(scene);
 			currentStage.centerOnScreen();
 		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK);
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("An Error Occurred.");
+			alert.setGraphic(null);
+			alert.getDialogPane().getChildren().clear();
+			
+			TextArea area = new TextArea(e.getLocalizedMessage());
+			area.setWrapText(true);
+			area.setEditable(false);
+			alert.getDialogPane().setContent(area);
 			alert.showAndWait();
 		}
 	}
@@ -80,4 +88,5 @@ public class ConnectionPageCodeBehind {
 		this.classComboBox.getItems().addAll(PlayerRole.Warrior, PlayerRole.Mage, PlayerRole.Healer);
 		this.classComboBox.getSelectionModel().select(PlayerRole.Warrior);
 	}
+
 }

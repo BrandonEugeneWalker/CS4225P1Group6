@@ -16,6 +16,8 @@ public class FreshConnectionResults implements Serializable {
 	private int port;
 	private ArrayList<EntityInformation> players;
 	private EntityInformation enemy;
+	
+	private boolean isGameReady;
 
 	/**
 	 * Creates a new FreshConnectionResults object.
@@ -27,8 +29,9 @@ public class FreshConnectionResults implements Serializable {
 	 * @param port    the port.
 	 * @param players the players.
 	 * @param enemy   the enemy.
+	 * @param isGameReady whether or not the game is ready to start.
 	 */
-	public FreshConnectionResults(int port, ArrayList<EntityInformation> players, EntityInformation enemy) {
+	public FreshConnectionResults(int port, ArrayList<EntityInformation> players, EntityInformation enemy, boolean isGameReady) {
 		if (players == null) {
 			throw new IllegalArgumentException("players should not be null.");
 		}
@@ -39,8 +42,21 @@ public class FreshConnectionResults implements Serializable {
 		this.port = port;
 		this.players = players;
 		this.enemy = enemy;
+		this.isGameReady = isGameReady;
 	}
 
+	/**
+	 * Determines if the game is ready to start.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return true if the game is ready to start; false otherwise.
+	 */
+	public boolean isGameReady() {
+		return this.isGameReady;
+	}
+	
 	/**
 	 * Gets the port.
 	 * 

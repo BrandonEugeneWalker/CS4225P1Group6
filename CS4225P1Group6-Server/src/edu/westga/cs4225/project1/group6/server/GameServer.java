@@ -61,7 +61,7 @@ public class GameServer {
 	 * @postcondition the server starts
 	 * 
 	 * @throws IOException            if an I/O error occurs.
-	 * @throws ClassNotFoundException
+	 * @throws ClassNotFoundException if the deserialization causes an error.
 	 */
 	public void start() throws IOException, ClassNotFoundException {
 		System.out.println("Server Running - Port: " + this.port);
@@ -97,12 +97,12 @@ public class GameServer {
 
 		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-			EntityInformation playerInformation = (EntityInformation) in.readObject();
-			Player player = new Player(playerInformation.getPlayerName(),
-					Role.createRole(playerInformation.getPlayerRole()), clientConnection);
+			EntityInformation information = (EntityInformation) in.readObject();
+			Player player = new Player(information.getPlayerName(),
+					Role.createRole(information.getPlayerRole()), clientConnection);
 			this.game.addPlayer(player);
 
-			System.out.println(playerInformation.getPlayerName() + " was added to the game.");
+			System.out.println(information.getPlayerName() + " was added to the game.");
 			out.writeObject(this.getInitializationInformation(port));
 		}
 	}
@@ -111,19 +111,19 @@ public class GameServer {
 		ArrayList<EntityInformation> playerDescriptions = new ArrayList<EntityInformation>();
 		Collection<Player> players = this.game.getPlayers();
 		for (Player currentPlayer : players) {
-			EntityInformation currentPlayerDescription = new EntityInformation(currentPlayer.getName(),
+			EntityInformation playerInfo = new EntityInformation(currentPlayer.getName(),
 					currentPlayer.getRole());
-			currentPlayerDescription.setPlayerHealth(currentPlayer.getHealthRemaining());
-			currentPlayerDescription.setPlayerMana(currentPlayer.getManaRemaining());
+			playerInfo.setPlayerHealth(currentPlayer.getHealthRemaining());
+			playerInfo.setPlayerMana(currentPlayer.getManaRemaining());
 
-			playerDescriptions.add(currentPlayerDescription);
+			playerDescriptions.add(playerInfo);
 		}
 		Entity enemy = this.game.getEnemy();
-		EntityInformation enemyDescription = new EntityInformation("Boss", enemy.getRole());
-		enemyDescription.setPlayerHealth(enemy.getHealthRemaining());
-		enemyDescription.setPlayerMana(enemy.getManaRemaining());
+		EntityInformation enemyInfo = new EntityInformation("Boss", enemy.getRole());
+		enemyInfo.setPlayerHealth(enemy.getHealthRemaining());
+		enemyInfo.setPlayerMana(enemy.getManaRemaining());
 
-		return new FreshConnectionResults(port, playerDescriptions, enemyDescription);
+		return new FreshConnectionResults(port, playerDescriptions, enemyInfo, this.game.isReady());
 	}
 
 	/**
