@@ -3,6 +3,7 @@ package edu.westga.cs4225.project1.group6.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.westga.cs4225.project1.group6.client.RunnableTask;
 import edu.westga.cs4225.project1.group6.controller.GamePageController;
 import edu.westga.cs4225.project1.group6.model.EntityInformation;
 import edu.westga.cs4225.project1.group6.model.MoveType;
@@ -63,22 +64,35 @@ public class GamePageCodeBehind {
 	@FXML
 	void primaryActionClicked(MouseEvent event) {
 		this.disableAll(true);
+		RunnableTask task = new RunnableTask(() -> this.executePrimaryAction(), runnableTask -> {
+			if (!this.isGameOver) {
+				this.disableAll(false);
+			}
+		});
+		Thread actionThread = new Thread(task);
+		actionThread.start();
+	}
+	
+	private void executePrimaryAction() {
 		GamePageController.get().submitMove(MoveType.REGULAR);
 		this.updateNodes();
-		if (!this.isGameOver) {
-			this.disableAll(false);
-		}
-		
 	}
 
 	@FXML
 	void secondaryActionClicked(MouseEvent event) {
 		this.disableAll(true);
+		RunnableTask task = new RunnableTask(() -> this.executeSecondaryAction(), runnableTask -> {
+			if (!this.isGameOver) {
+				this.disableAll(false);
+			}
+		});
+		Thread actionThread = new Thread(task);
+		actionThread.start();
+	}
+	
+	private void executeSecondaryAction() {
 		GamePageController.get().submitMove(MoveType.SPECIAL);
 		this.updateNodes();
-		if (!this.isGameOver) {
-			this.disableAll(false);
-		}
 	}
 
 	private void disableAll(boolean isDisabled) {
